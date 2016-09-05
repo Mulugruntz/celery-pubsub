@@ -4,7 +4,7 @@ python:
   - "2.7"
 
 env:
-  - CODECLIMATE_REPO_TOKEN=57cd5461c4db6073c800063c
+  - CODECLIMATE_REPO_TOKEN=4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
 
 install:
   - pip install -r requirements.txt
