@@ -1,5 +1,7 @@
 # celery-pubsub
-[![Build Status](https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master)](https://travis-ci.org/Mulugruntz/celery-pubsub)
+[![Build Status](https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master)](https://travis-ci.org/Mulugruntz/celery-pubsub) [![Code Climate](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/gpa.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub) [![Test Coverage](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/coverage.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub/coverage) [![Issue Count](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/issue_count.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub)
+[![Build Status](https://travis-matrix-badges.herokuapp.com/repos/Mulugruntz/celery-pubsub/branches/master)](https://travis-ci.org/bjfish/grails-ci-build-matrix-example)
+
 Publish and Subscribe with Celery
 
 Basic usage:
