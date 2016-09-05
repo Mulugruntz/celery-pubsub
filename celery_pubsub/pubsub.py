@@ -18,8 +18,9 @@ class PubSubManager(object):
         return result
 
     def subscribe(self, topic, task):
-        if (topic, task) not in self.subscribed:
-            self.subscribed.append((topic, self._topic_to_re(topic), task))
+        regex = self._topic_to_re(topic)
+        if (topic, regex, task) not in self.subscribed:
+            self.subscribed.append((topic, regex, task))
             self.jobs = {}
 
     def unsubscribe(self, topic, task):

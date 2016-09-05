@@ -60,17 +60,18 @@ celery_pubsub.subscribe('index.#.test', job_g)
 
 class PubsubTest(unittest.TestCase):
     def test_subscription(self):
-        res = celery_pubsub.publish('dummy', 4, 8, a15=16, a23=42).get()
+        from celery_pubsub import publish, subscribe
+        res = publish('dummy', 4, 8, a15=16, a23=42).get()
         self.assertListEqual(sorted(res), sorted(['e']))
 
-        celery_pubsub.subscribe('dummy', job_c)
+        subscribe('dummy', job_c)
 
-        res = celery_pubsub.publish('dummy', 4, 8, a15=16, a23=42).get()
+        res = publish('dummy', 4, 8, a15=16, a23=42).get()
         self.assertListEqual(sorted(res), sorted(['e', 'c']))
 
         celery_pubsub.unsubscribe('dummy', job_c)
 
-        res = celery_pubsub.publish('dummy', 4, 8, a15=16, a23=42).get()
+        res = publish('dummy', 4, 8, a15=16, a23=42).get()
         self.assertListEqual(sorted(res), sorted(['e']))
 
     def test_1(self):
@@ -104,6 +105,24 @@ class PubsubTest(unittest.TestCase):
         res = publish('index.high.test', 4, 8, a15=16, a23=42).get()
         self.assertListEqual(sorted(res), sorted(['d', 'e', 'f', 'g']))
 
+    def test_subscription_redundant(self):
+        jobs_init = celery_pubsub.pubsub._pubsub_manager.get_jobs('redundant.test').tasks
+        celery_pubsub.subscribe('redundant.test', job_a)
+        jobs_before = celery_pubsub.pubsub._pubsub_manager.get_jobs('redundant.test').tasks
+        celery_pubsub.subscribe('redundant.test', job_a)
+        jobs_after = celery_pubsub.pubsub._pubsub_manager.get_jobs('redundant.test').tasks
+        celery_pubsub.unsubscribe('redundant.test', job_a)
+        jobs_end = celery_pubsub.pubsub._pubsub_manager.get_jobs('redundant.test').tasks
+
+        self.assertListEqual(jobs_before, jobs_after)
+        self.assertListEqual(jobs_init, jobs_end)
+
+    def test_unsubscribe_nonexistant(self):
+        jobs_before = celery_pubsub.pubsub._pubsub_manager.get_jobs('not.exists').tasks
+        celery_pubsub.unsubscribe('not.exists', job_a)
+        jobs_after = celery_pubsub.pubsub._pubsub_manager.get_jobs('not.exists').tasks
+
+        self.assertListEqual(jobs_before, jobs_after)
 
 if __name__ == '__main__':
     unittest.main()

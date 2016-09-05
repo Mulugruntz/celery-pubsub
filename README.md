@@ -1,4 +1,5 @@
 # celery-pubsub
+[![Build Status](https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master)](https://travis-ci.org/Mulugruntz/celery-pubsub)
 Publish and Subscribe with Celery
 
 Basic usage:

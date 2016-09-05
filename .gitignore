@@ -1,0 +1,5 @@
+dist/*
+cover/*
+.idea
+.coverage
+MANIFEST

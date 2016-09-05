@@ -3,12 +3,20 @@ language: python
 python:
   - "2.7"
 
+env:
+  - CODECLIMATE_REPO_TOKEN=57cd5461c4db6073c800063c
+
 install:
   - pip install -r requirements.txt
+  - pip install codeclimate-test-reporter
+  - pip install nose
 
 script:
   - THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   - export PYTHONPATH=$THIS_DIR:$PYTHONPATH
-  - python tests/pubsub.py
+  - nosetests --cover-branches --with-coverage --cover-erase --cover-package=celery_pubsub tests/pubsub.py
+  #  - coverage run --source=celery_pubsub tests/pubsub.py
+  #  - coverage report -m
+  - codeclimate-test-reporter
 
 sudo: false
