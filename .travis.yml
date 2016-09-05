@@ -1,6 +1,14 @@
 language: python
+
 python:
   - "2.7"
+
 install:
   - pip install -r requirements.txt
-script: python tests/pubsub.py
+
+script:
+  - THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  - export PYTHONPATH=$THIS_DIR:$PYTHONPATH
+  - python tests/pubsub.py
+
+sudo: false
