@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
     name='celery-pubsub',
     packages=['celery_pubsub'],
-    version='0.1.2',
+    version='0.1.4',
     description='A Publish and Subscribe library for Celery',
     author='Samuel GIFFARD',
     author_email='mulugruntz@gmail.com',
     license='MIT',
     url='https://github.com/Mulugruntz/celery-pubsub',
-    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.1.2',
+    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.1.4',
     keywords=['celery', 'publish', 'subscribe', 'pubsub'],
     classifiers=[
         'Development Status :: 3 - Alpha',
