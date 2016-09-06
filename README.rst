@@ -55,20 +55,20 @@ Advanced usage:
  
 Wildcards can be used in topic names:
  
- * `*` matches any one group
-    * `some.*.test` will match `some.awesome.test`, `some.random.test`
-      but not `some.pretty.cool.test`, `elsewhere` or `here.some.up.test`
-    * `some.*` will match `some.test` and `some.thing` but it won't
-      match `some` or `some.testy.test`
+* `*` matches any one group
+   * `some.*.test` will match `some.awesome.test`, `some.random.test`
+     but not `some.pretty.cool.test`, `elsewhere` or `here.some.up.test`
+   * `some.*` will match `some.test` and `some.thing` but it won't
+     match `some` or `some.testy.test`
 
- * `#` matches any number of groups
-    * `some.#.test` will match `some.awesome.test`, `some.random.test`,
-      `some.pretty.cool.test` but not `elsewhere` or `here.some.up.test`
-    * `some.#` will match anything that starts with `some.`, such as
-      `some.very.specific.topic.indeed`
-    * `#` will match anything
- 
- 
+* `#` matches any number of groups
+   * `some.#.test` will match `some.awesome.test`, `some.random.test`,
+     `some.pretty.cool.test` but not `elsewhere` or `here.some.up.test`
+   * `some.#` will match anything that starts with `some.`, such as
+     `some.very.specific.topic.indeed`
+   * `#` will match anything
+
+
 .. code-block:: python
  
     # Let's subscribe
