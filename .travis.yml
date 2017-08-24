@@ -2,12 +2,14 @@ language: python
 
 python:
   - "2.7"
+  - "3.6"
 
 env:
   - CODECLIMATE_REPO_TOKEN=4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
 
 install:
   - pip install -r requirements.txt
+  - pip install "coverage>4.0,<4.4" # https://bitbucket.org/ned/coveragepy/issues/578/incomplete-file-path-in-xml-report
   - pip install codeclimate-test-reporter
   - pip install nose
 
