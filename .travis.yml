@@ -12,14 +12,11 @@ install:
   - pip install -r requirements.txt
   - pip install "coverage>4.0,<4.4" # https://bitbucket.org/ned/coveragepy/issues/578/incomplete-file-path-in-xml-report
   - pip install codeclimate-test-reporter
-  - pip install nose
 
 script:
   - THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   - export PYTHONPATH=$THIS_DIR:$PYTHONPATH
-  - nosetests --cover-branches --with-coverage --cover-erase --cover-package=celery_pubsub tests/pubsub.py
-  #  - coverage run --source=celery_pubsub tests/pubsub.py
-  #  - coverage report -m
+  - python setup.py test
   - codeclimate-test-reporter
 
 sudo: false
