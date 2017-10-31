@@ -1,5 +1,7 @@
 import codecs
-from distutils.core import setup
+import setuptools
+import setuptools.command.test
+import sys
 
 
 def long_description():
@@ -9,7 +11,23 @@ def long_description():
         return 'Long description error: Missing README.rst file'
 
 
-setup(
+def install_requires():
+    return [req.strip() for req in codecs.open('requirements.txt', 'r', 'utf-8').readlines()]
+
+
+class nosetest(setuptools.command.test.test):
+    def initialize_options(self):
+        setuptools.command.test.test.initialize_options(self)
+        self.argv = [
+            '--cover-branches', '--with-coverage', '--cover-erase', '--cover-package=celery_pubsub', 'tests/pubsub.py'
+        ]
+
+    def run_tests(self):
+        import nose
+        sys.exit(nose.main(argv=self.argv))
+
+
+setuptools.setup(
     name='celery-pubsub',
     packages=['celery_pubsub'],
     version='0.1.6',
@@ -31,5 +49,7 @@ setup(
         'Topic :: System :: Distributed Computing',
         'Topic :: Utilities',
     ],
-    install_requires=['celery'],
+    cmdclass={'test': nosetest},
+    install_requires=install_requires(),
+    tests_require=['nose'],
 )
