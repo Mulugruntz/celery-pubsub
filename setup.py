@@ -11,8 +11,16 @@ def long_description():
         return 'Long description error: Missing README.rst file'
 
 
+def _strip_comments(l):
+    return l.split('#', 1)[0].strip()
+
+
 def install_requires():
-    return [req.strip() for req in codecs.open('requirements.txt', 'r', 'utf-8').readlines()]
+    return [_strip_comments(req) for req in codecs.open('requirements.txt', 'r', 'utf-8').readlines() if req]
+
+
+def tests_require():
+    return [_strip_comments(req) for req in codecs.open('requirements_test.txt', 'r', 'utf-8').readlines() if req]
 
 
 class nosetest(setuptools.command.test.test):
@@ -51,5 +59,5 @@ setuptools.setup(
     ],
     cmdclass={'test': nosetest},
     install_requires=install_requires(),
-    tests_require=['nose'],
+    tests_require=tests_require(),
 )
