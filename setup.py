@@ -1,9 +1,20 @@
+import codecs
 from distutils.core import setup
+
+
+def long_description():
+    try:
+        return codecs.open('README.rst', 'r', 'utf-8').read()
+    except IOError:
+        return 'Long description error: Missing README.rst file'
+
+
 setup(
     name='celery-pubsub',
     packages=['celery_pubsub'],
     version='0.1.6',
     description='A Publish and Subscribe library for Celery',
+    long_description=long_description(),
     author='Samuel GIFFARD',
     author_email='mulugruntz@gmail.com',
     license='MIT',
