@@ -38,14 +38,14 @@ class nosetest(setuptools.command.test.test):
 setuptools.setup(
     name='celery-pubsub',
     packages=['celery_pubsub'],
-    version='0.1.6',
+    version='0.1.7',
     description='A Publish and Subscribe library for Celery',
     long_description=long_description(),
     author='Samuel GIFFARD',
     author_email='mulugruntz@gmail.com',
     license='MIT',
     url='https://github.com/Mulugruntz/celery-pubsub',
-    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.1.6',
+    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.1.7',
     keywords=['celery', 'publish', 'subscribe', 'pubsub'],
     classifiers=[
         'Development Status :: 3 - Alpha',
