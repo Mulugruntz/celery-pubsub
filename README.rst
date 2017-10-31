@@ -1,5 +1,5 @@
-celery-pubsub
-=============
+celery-pubsub 0.1.7
+===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
     :target: https://travis-ci.org/Mulugruntz/celery-pubsub
