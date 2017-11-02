@@ -1,4 +1,5 @@
 import codecs
+import os
 import setuptools
 import setuptools.command.test
 import sys
@@ -15,12 +16,17 @@ def _strip_comments(l):
     return l.split('#', 1)[0].strip()
 
 
+def parse_req_file(filename):
+    full_path = os.path.join(os.getcwd(), filename)
+    return [_strip_comments(req) for req in codecs.open(full_path, 'r', 'utf-8').readlines() if req]
+
+
 def install_requires():
-    return [_strip_comments(req) for req in codecs.open('requirements.txt', 'r', 'utf-8').readlines() if req]
+    return parse_req_file('requirements.txt')
 
 
 def tests_require():
-    return [_strip_comments(req) for req in codecs.open('requirements_test.txt', 'r', 'utf-8').readlines() if req]
+    return parse_req_file('requirements_test.txt')
 
 
 class nosetest(setuptools.command.test.test):
@@ -58,6 +64,7 @@ setuptools.setup(
         'Topic :: Utilities',
     ],
     cmdclass={'test': nosetest},
+    include_package_data=True,
     install_requires=install_requires(),
     tests_require=tests_require(),
 )
