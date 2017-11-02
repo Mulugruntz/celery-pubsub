@@ -1,4 +1,4 @@
-celery-pubsub 0.1.7
+celery-pubsub 0.1.8
 ===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
@@ -101,6 +101,8 @@ Wildcards can be used in topic names:
 Changelog:
 ==========
 
+* 0.1.8
+    * Fixup for broken ``pip install celery_pubsub==0.1.7``
 * 0.1.7
     * PyPI long description fixed
     * Removed README.md and fixed README.rst
