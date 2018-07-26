@@ -1,12 +1,24 @@
 language: python
 
-python:
-  - "2.7"
-  - "3.6"
-  - "pypy"
+matrix:
+  include:
+    - python: 2.7
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      sudo: true
+    - python: pypy2.7-5.8.0
+    - python: pypy3.5-5.8.0
 
 env:
   - CODECLIMATE_REPO_TOKEN=4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
+
+before_install:
+  - python --version
+  - uname -a
+  - lsb_release -a
 
 install:
   - pip install -r requirements.txt
