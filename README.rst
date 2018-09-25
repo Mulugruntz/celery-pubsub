@@ -1,4 +1,4 @@
-celery-pubsub 0.1.8
+celery-pubsub 0.1.9
 ===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
@@ -15,7 +15,11 @@ celery-pubsub 0.1.8
 .. image:: https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/issue_count.svg
    :target: https://codeclimate.com/github/Mulugruntz/celery-pubsub
    :alt: Issue Count
- 
+
+.. image:: https://pepy.tech/badge/celery-pubsub
+   :target: https://pepy.tech/project/celery-pubsub
+   :alt: Downloads
+
 Publish and Subscribe with Celery
  
 Basic usage:
@@ -101,6 +105,16 @@ Wildcards can be used in topic names:
 Changelog:
 ==========
 
+* 0.1.9
+    * Added Python 3.4, 3.5, 3.7, and multiple branches of pypy
+    * Pinned requirements' dependency versions.
+        * celery 4.1.0 -> 4.2.1
+        * kombu 4.1.0 -> 4.2.1
+        * billiard 3.5.0 -> 3.5.0.4
+        * nose pinned to 1.3.7
+        * coverage pinned to 4.3.4 (was already 4.3.4 but fuzzy)
+        * codeclimate-test-reported pinned to 0.2.3
+    * Extra badge to show the number of downloads (thanks to PePy)
 * 0.1.8
     * Fixup for broken ``pip install celery_pubsub==0.1.7``
 * 0.1.7
