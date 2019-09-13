@@ -1,4 +1,6 @@
 dist/*
+build/*
+celery_pubsub.egg-info/*
 cover/*
 .idea
 .coverage

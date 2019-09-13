@@ -6,7 +6,7 @@ matrix:
     - python: 3.5
     - python: 3.6
     - python: 3.7
-    - python: 3.8-dev
+    - python: 3.8
     - python: pypy2.7-7.1.1
     - python: pypy3.5-5.8.0
       dist: trusty
@@ -14,21 +14,31 @@ matrix:
     - python: pypy3.6-7.1.1
 
 env:
-  - CODECLIMATE_REPO_TOKEN=4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
+  global:
+    - CC_TEST_REPORTER_ID=4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
 
 before_install:
   - python --version
   - uname -a
   - lsb_release -a
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
 
 install:
   - pip install -r requirements.txt
   - pip install -r requirements_test.txt
 
+before_script:
+  - ./cc-test-reporter before-build
+
 script:
   - THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   - export PYTHONPATH=$THIS_DIR:$PYTHONPATH
   - python setup.py test
-  - codeclimate-test-reporter
+
+# Pipe the coverage data to Code Climate
+after_script:
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then sed -i 's|celery_pubsub.py|celery_pubsub/__init__.py|' coverage.xml; fi
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT coverage.xml; fi
 
 sudo: false

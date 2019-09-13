@@ -18,7 +18,10 @@ def _strip_comments(l):
 
 def parse_req_file(filename):
     full_path = os.path.join(os.getcwd(), filename)
-    return [_strip_comments(req) for req in codecs.open(full_path, 'r', 'utf-8').readlines() if req]
+    return [
+        _strip_comments(req)
+        for req in codecs.open(full_path, 'r', 'utf-8').readlines() if req
+    ]
 
 
 def install_requires():
@@ -33,7 +36,13 @@ class nosetest(setuptools.command.test.test):
     def initialize_options(self):
         setuptools.command.test.test.initialize_options(self)
         self.argv = [
-            '--cover-branches', '--with-coverage', '--cover-erase', '--cover-package=celery_pubsub', 'tests/pubsub.py'
+            '--cover-branches',
+            '--with-coverage',
+            '--cover-xml',
+            '--cover-inclusive',
+            '--cover-erase',
+            '--cover-package=celery_pubsub',
+            'tests/pubsub.py',
         ]
 
     def run_tests(self):
@@ -44,14 +53,14 @@ class nosetest(setuptools.command.test.test):
 setuptools.setup(
     name='celery-pubsub',
     packages=['celery_pubsub'],
-    version='0.2.0',
+    version='0.2.1',
     description='A Publish and Subscribe library for Celery',
     long_description=long_description(),
     author='Samuel GIFFARD',
     author_email='mulugruntz@gmail.com',
     license='MIT',
     url='https://github.com/Mulugruntz/celery-pubsub',
-    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.2.0',
+    download_url='https://github.com/Mulugruntz/celery-pubsub/tarball/0.2.1',
     keywords=['celery', 'publish', 'subscribe', 'pubsub'],
     classifiers=[
         'Development Status :: 3 - Alpha',
