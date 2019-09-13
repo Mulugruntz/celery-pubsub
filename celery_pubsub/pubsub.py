@@ -49,7 +49,12 @@ class PubSubManager(object):
     def _topic_to_re(topic):
         assert isinstance(topic, str)
         import re
-        re_topic = topic.replace('.', r'\.').replace('*', r'[^.]+').replace('#', r'.+')
+        re_topic = (
+            topic
+            .replace('.', r'\.')
+            .replace('*', r'[^.]+')
+            .replace('#', r'.+')
+        )
         return re.compile(r'^{}$'.format(re_topic))
 
 
