@@ -18,7 +18,10 @@ def _strip_comments(l):
 
 def parse_req_file(filename):
     full_path = os.path.join(os.getcwd(), filename)
-    return [_strip_comments(req) for req in codecs.open(full_path, 'r', 'utf-8').readlines() if req]
+    return [
+        _strip_comments(req)
+        for req in codecs.open(full_path, 'r', 'utf-8').readlines() if req
+    ]
 
 
 def install_requires():
@@ -33,7 +36,11 @@ class nosetest(setuptools.command.test.test):
     def initialize_options(self):
         setuptools.command.test.test.initialize_options(self)
         self.argv = [
-            '--cover-branches', '--with-coverage', '--cover-erase', '--cover-package=celery_pubsub', 'tests/pubsub.py'
+            '--cover-branches',
+            '--with-coverage',
+            '--cover-erase',
+            '--cover-package=celery_pubsub',
+            'tests/pubsub.py',
         ]
 
     def run_tests(self):
