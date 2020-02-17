@@ -1,4 +1,5 @@
 import celery
+import re
 
 __all__ = ['publish', 'publish_now', 'subscribe', 'unsubscribe', ]
 
@@ -6,7 +7,7 @@ __all__ = ['publish', 'publish_now', 'subscribe', 'unsubscribe', ]
 class PubSubManager(object):
     def __init__(self):
         super(PubSubManager, self).__init__()
-        self.subscribed = []
+        self.subscribed = set()
         self.jobs = {}
 
     def publish(self, topic, *args, **kwargs):
@@ -18,19 +19,15 @@ class PubSubManager(object):
         return result
 
     def subscribe(self, topic, task):
-        regex = self._topic_to_re(topic)
-        if (topic, regex, task) not in self.subscribed:
-            self.subscribed.append((topic, regex, task))
+        key = (topic, self._topic_to_re(topic), task)
+        if key not in self.subscribed:
+            self.subscribed.add(key)
             self.jobs = {}
 
     def unsubscribe(self, topic, task):
-        found = -1
-        for idx, triplet in enumerate(self.subscribed):
-            if (triplet[0], triplet[2]) == (topic, task):
-                found = idx
-                break
-        if not found == -1:
-            del self.subscribed[found]
+        key = (topic, self._topic_to_re(topic), task)
+        if key in self.subscribed:
+            self.subscribed.discard(key)
             self.jobs = {}
 
     def get_jobs(self, topic):
@@ -48,7 +45,6 @@ class PubSubManager(object):
     @staticmethod
     def _topic_to_re(topic):
         assert isinstance(topic, str)
-        import re
         re_topic = (
             topic
             .replace('.', r'\.')
