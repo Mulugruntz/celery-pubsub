@@ -1,4 +1,4 @@
-celery-pubsub 0.2.0
+celery-pubsub 0.2.1
 ===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
@@ -105,6 +105,11 @@ Wildcards can be used in topic names:
 Changelog:
 ==========
 
+* 0.2.1
+    * Pinned requirements' dependency versions.
+        * celery 4.3.0 -> 4.4.0
+        * kombu 4.6.4 -> 4.6.7
+        * billiard 3.6.1.0 -> 3.6.2.0
 * 0.2.0
     * Removed Python 3.4 support. Reason: no longer supported by Kombu 4.6+.
     * Officially supported by Python 3.8.
