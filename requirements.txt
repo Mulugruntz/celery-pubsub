@@ -1,3 +1,1 @@
-celery>=3.1.19
-kombu>=3.0.30
-billiard>=3.3.0.21
+celery>=3.1.0
