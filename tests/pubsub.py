@@ -6,9 +6,9 @@ celery.current_app.conf.update(
     CELERY_ALWAYS_EAGER=True,
 )
 
-if celery.__version__ < '4.0.0':
+if celery.__version__ < '4.0.0':  # pragma: no cover
     task = celery.task
-else:
+else:  # pragma: no cover
     app = celery.Celery()
     task = app.task
 
@@ -130,5 +130,5 @@ class PubsubTest(unittest.TestCase):
 
         self.assertListEqual(jobs_before, jobs_after)
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     unittest.main()
