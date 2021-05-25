@@ -1,7 +1,12 @@
 import celery
 import re
 
-__all__ = ['publish', 'publish_now', 'subscribe', 'unsubscribe', ]
+__all__ = [
+    "publish",
+    "publish_now",
+    "subscribe",
+    "unsubscribe",
+]
 
 
 class PubSubManager(object):
@@ -45,13 +50,8 @@ class PubSubManager(object):
     @staticmethod
     def _topic_to_re(topic):
         assert isinstance(topic, str)
-        re_topic = (
-            topic
-            .replace('.', r'\.')
-            .replace('*', r'[^.]+')
-            .replace('#', r'.+')
-        )
-        return re.compile(r'^{}$'.format(re_topic))
+        re_topic = topic.replace(".", r"\.").replace("*", r"[^.]+").replace("#", r".+")
+        return re.compile(r"^{}$".format(re_topic))
 
 
 _pubsub_manager = None
