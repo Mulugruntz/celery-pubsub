@@ -3,5 +3,14 @@ build/*
 celery_pubsub.egg-info/*
 cover/*
 .idea
-.coverage
+.eggs
 MANIFEST
+
+cc-test-reporter
+.coverage
+coverage.xml
+coverage/
+
+# Because it's a library
+Pipfile
+Pipfile.lock
