@@ -1,6 +1,10 @@
 language: python
 
-matrix:
+dist: xenial
+
+os: linux
+
+jobs:
   include:
     - python: 2.7
     - python: 3.5
@@ -40,5 +44,3 @@ script:
 after_script:
   - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then sed -i 's|celery_pubsub.py|celery_pubsub/__init__.py|' coverage.xml; fi
   - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT coverage.xml; fi
-
-sudo: false
