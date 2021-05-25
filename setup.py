@@ -1,8 +1,6 @@
 import codecs
 import os
-import setuptools
 import setuptools.command.test
-import sys
 
 
 def long_description():
@@ -12,8 +10,8 @@ def long_description():
         return "Long description error: Missing README.rst file"
 
 
-def _strip_comments(l):
-    return l.split("#", 1)[0].strip()
+def _strip_comments(line):
+    return line.split("#", 1)[0].strip()
 
 
 def parse_req_file(filename):
@@ -31,25 +29,6 @@ def install_requires():
 
 def tests_require():
     return parse_req_file("requirements_test.txt")
-
-
-class nosetest(setuptools.command.test.test):
-    def initialize_options(self):
-        setuptools.command.test.test.initialize_options(self)
-        self.argv = [
-            "--cover-branches",
-            "--with-coverage",
-            "--cover-xml",
-            "--cover-inclusive",
-            "--cover-erase",
-            "--cover-package=celery_pubsub",
-            "tests/pubsub.py",
-        ]
-
-    def run_tests(self):
-        import nose
-
-        sys.exit(nose.main(argv=self.argv))
 
 
 setuptools.setup(
@@ -77,7 +56,6 @@ setuptools.setup(
         "Topic :: System :: Distributed Computing",
         "Topic :: Utilities",
     ],
-    cmdclass={"test": nosetest},
     include_package_data=True,
     install_requires=install_requires(),
     tests_require=tests_require(),
