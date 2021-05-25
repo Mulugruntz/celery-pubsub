@@ -1,0 +1,10 @@
+[run]
+branch = True
+include =
+    celery_pubsub/*
+    tests/*
+
+[report]
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover

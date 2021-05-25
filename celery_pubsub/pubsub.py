@@ -55,7 +55,7 @@ class PubSubManager(object):
 
 
 _pubsub_manager = None
-if _pubsub_manager is None:
+if _pubsub_manager is None:  # pragma: no cover
     _pubsub_manager = PubSubManager()
 
 
