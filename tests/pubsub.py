@@ -6,44 +6,50 @@ celery.current_app.conf.update(
     CELERY_ALWAYS_EAGER=True,
 )
 
+if celery.__version__ < '4.0.0':
+    task = celery.task
+else:
+    app = celery.Celery()
+    task = app.task
 
-@celery.task
+
+@task
 def job_a(*args, **kwargs):
     print("job_a: {} {}".format(args, kwargs))
     return "a"
 
 
-@celery.task
+@task
 def job_b(*args, **kwargs):
     print("job_b: {} {}".format(args, kwargs))
     return "b"
 
 
-@celery.task
+@task
 def job_c(*args, **kwargs):
     print("job_c: {} {}".format(args, kwargs))
     return "c"
 
 
-@celery.task
+@task
 def job_d(*args, **kwargs):
     print("job_d: {} {}".format(args, kwargs))
     return "d"
 
 
-@celery.task
+@task
 def job_e(*args, **kwargs):
     print("job_e: {} {}".format(args, kwargs))
     return "e"
 
 
-@celery.task
+@task
 def job_f(*args, **kwargs):
     print("job_f: {} {}".format(args, kwargs))
     return "f"
 
 
-@celery.task
+@task
 def job_g(*args, **kwargs):
     print("job_g: {} {}".format(args, kwargs))
     return "g"
