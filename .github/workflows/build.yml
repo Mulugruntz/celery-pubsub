@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ['2.7', '3.5', '3.6', '3.7', '3.8', 'pypy-2.7-v7.3.5', 'pypy-3.6.12-v7.3.3', 'pypy-3.7.10-v7.3.5']
+        python-version: ['2.7', '3.5', '3.6', '3.7', '3.8', 'pypy-2.7-v7.3.5', 'pypy-3.6-v7.3.3', 'pypy-3.7-v7.3.5']
         os: [ubuntu-latest]  #, windows-latest, macOS-latest]
       fail-fast: false
     timeout-minutes: 5
