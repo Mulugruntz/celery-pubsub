@@ -1,4 +1,4 @@
 celery==5.2.0
 vine==5.0.0
-kombu==5.0.2
+kombu==5.2.1
 billiard==3.6.4.0
