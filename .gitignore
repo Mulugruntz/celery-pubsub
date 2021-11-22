@@ -1,7 +1,10 @@
+__pycache__
 dist/*
 build/*
 celery_pubsub.egg-info/*
 cover/*
+coverage.xml
+.eggs
 .idea
 .coverage
-MANIFEST
+.mypy_cache
