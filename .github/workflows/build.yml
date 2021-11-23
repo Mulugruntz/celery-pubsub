@@ -1,6 +1,11 @@
 name: Build and Test
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
 
 jobs:
   matrix-builder:
@@ -69,3 +74,37 @@ jobs:
       with:
         coverageCommand: coverage xml
         debug: true
+    - name: Prepare badges
+      id: badges
+      run: |
+        CELERY_MAJOR=$(echo "${{ matrix.celery }}" | sed -r 's/^([^.]+).*$/\1/; s/^[^0-9]*([0-9]+).*$/\1/')
+        echo "##[set-output name=celery;]$CELERY_MAJOR"
+        echo ::set-output name=source_name::${GITHUB_REF#refs/*/}
+        echo ::set-output name=source_branch::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=source_tag::${GITHUB_REF#refs/tags/}
+        [[ "${{ matrix.python-version }}" == pypy* ]] \
+            && echo "##[set-output name=python;]$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" \
+            || echo "##[set-output name=python;]${{ matrix.python-version }}"
+        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "##[set-output name=platform;]linux" || echo "Not on linux"
+        [[ "${{ matrix.os }}" == windows* ]] && echo "##[set-output name=platform;]windows" || echo "Not on window"
+        [[ "${{ matrix.os }}" == macOS* ]] && echo "##[set-output name=platform;]apple" || echo "Not on macOS"
+    - name: Badge Creation (master)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event.pull_request.merged == true
+      with:
+        NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "Python ${{ steps.badges.outputs.python }}"
+        STATUS: "Celery ${{ steps.badges.outputs.celery }}"
+        COLOR: green
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
+    - name: Badge Creation (tag)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event_name == 'push' && github.ref_type == 'tag'
+      with:
+        NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "Python ${{ steps.badges.outputs.python }}"
+        STATUS: "Celery ${{ steps.badges.outputs.celery }}"
+        COLOR: green
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
