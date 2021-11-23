@@ -3,13 +3,33 @@ name: Build and Test
 on: [push, pull_request]
 
 jobs:
+  matrix-builder:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
+      - id: set-matrix
+        env:
+          PY_VERSIONS: "[\"2.7\", \"3.5\", \"3.6\", \"3.7\", \"3.8\", \"pypy-2.7-v7.3.5\", \"pypy-3.6-v7.3.3\", \"pypy-3.7-v7.3.5\"]"
+          OS_NAMES: "[\"ubuntu-latest\"]"  #, windows-latest, macOS-latest]
+          CELERY_VERSIONS: "[\">=3.1.0,<4.0.0\", \">=4.0.0,<5.0.0\", \">=5.0.0,<6.0.0\"]"
+        run: |
+          python -m pip install --upgrade pip
+          MATRIX=$(python .github/workflows/resolve_versions.py matrix -c "$PY_VERSIONS" -o "$OS_NAMES" -n "celery" -s "$CELERY_VERSIONS")
+          echo "::set-output name=matrix::$MATRIX"
+
   build:
-    name: Test on Python ${{ matrix.python-version }} and ${{ matrix.os }}
+    name: Test on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
+    needs: matrix-builder
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        python-version: ['2.7', '3.5', '3.6', '3.7', '3.8', 'pypy-2.7-v7.3.5', 'pypy-3.6-v7.3.3', 'pypy-3.7-v7.3.5']
-        os: [ubuntu-latest]  #, windows-latest, macOS-latest]
+      matrix: ${{fromJSON(needs.matrix-builder.outputs.matrix)}}
       fail-fast: false
     timeout-minutes: 5
     steps:
@@ -29,14 +49,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements_test.txt
+        pip install "celery${{ matrix.celery }}"
         pip install pytest-github-actions-annotate-failures
     - name: Lint with flake8
       run: |
         pip install flake8
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude .github
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude .github
     - name: Test with pytest
       run: |
         coverage run -m pytest -v -s tests
