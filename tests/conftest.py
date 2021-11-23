@@ -26,6 +26,9 @@ else:  # pragma: no cover
             "broker_transport_options": {"polling_interval": 0.05},
         }
 
+    if celery.__version__ >= "5.0.0":
+        pytest_plugins = ["celery.contrib.pytest"]
+
 
 @pytest.fixture(scope="session")
 def job_a():
