@@ -1,4 +1,4 @@
-celery-pubsub 0.2.1
+celery-pubsub 1.0.0
 ===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
@@ -105,6 +105,11 @@ Wildcards can be used in topic names:
 Changelog:
 ==========
 
+* 1.0.0
+    * Flexible requirements (no more pinned). Better to support a wide range of environments.
+    * Changed test framework from nose to pytest.
+    * Flake8
+    * Support for Python 3.9 and 3.10.
 * 0.2.1
     * Performance: Internally uses a ``set`` to store the subscribed tasks.
     * Updated Codeclimate as the `old reporter <https://github.com/codeclimate/python-test-reporter>`_ is deprecated.
