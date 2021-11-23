@@ -120,6 +120,17 @@ def process_matrix(args: Namespace) -> None:
     for c, o, n, s in matrix:
         compatible_versions = get_compatible_versions(c, o, n, s)
         if compatible_versions:
+            # This is because celery 3 depends on use_2to3,
+            # which is no longer supported by 3.9 and 3.10
+            if (
+                n == "celery"
+                and (
+                    c.replace(".", "").startswith("39")
+                    or c.replace(".", "").startswith("310")
+                )
+                and all(cv.startswith("3") for cv in compatible_versions)
+            ):
+                continue
             output["include"].append(
                 {
                     "python-version": c,
