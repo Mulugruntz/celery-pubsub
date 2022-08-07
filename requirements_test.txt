@@ -1,2 +1,2 @@
 pytest
-coverage==5.5
+coverage==6.4.3
