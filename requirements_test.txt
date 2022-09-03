@@ -1,2 +1,2 @@
-pytest
+pytest==7.1.3
 coverage==5.5
