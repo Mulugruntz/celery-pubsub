@@ -1,4 +1,4 @@
-celery-pubsub 1.0.0
+celery-pubsub 1.0.1
 ===================
 
 .. image:: https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master
@@ -104,7 +104,8 @@ Wildcards can be used in topic names:
  
 Changelog:
 ==========
-
+* 1.0.1
+    * Add stubs file
 * 1.0.0
     * Flexible requirements (no more pinned). Better to support a wide range of environments.
     * Changed test framework from nose to pytest.
