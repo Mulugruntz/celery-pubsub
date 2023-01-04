@@ -1,5 +1,6 @@
-import celery
 import re
+
+from celery import group
 
 __all__ = [
     "publish",
@@ -10,18 +11,16 @@ __all__ = [
 
 
 class PubSubManager(object):
-    def __init__(self):
-        super(PubSubManager, self).__init__()
-        self.subscribed = set()
-        self.jobs = {}
+    subscribed = set()
+    jobs = {}
 
     def publish(self, topic, *args, **kwargs):
-        result = self.get_jobs(topic).delay(*args, **kwargs)
-        return result
+        _result = self.get_jobs(topic).delay(*args, **kwargs)
+        return _result
 
     def publish_now(self, topic, *args, **kwargs):
-        result = self.get_jobs(topic).apply(args=args, kwargs=kwargs)
-        return result
+        _result = self.get_jobs(topic).apply(*args, **kwargs)
+        return _result
 
     def subscribe(self, topic, task):
         key = (topic, self._topic_to_re(topic), task)
@@ -45,7 +44,7 @@ class PubSubManager(object):
         for job in self.subscribed:
             if job[1].match(topic):
                 jobs.append(job[2].s())
-        self.jobs[topic] = celery.group(jobs)
+        self.jobs[topic] = group(jobs)
 
     @staticmethod
     def _topic_to_re(topic):
@@ -54,9 +53,7 @@ class PubSubManager(object):
         return re.compile(r"^{}$".format(re_topic))
 
 
-_pubsub_manager = None
-if _pubsub_manager is None:  # pragma: no cover
-    _pubsub_manager = PubSubManager()
+_pubsub_manager = PubSubManager()
 
 
 def publish(topic, *args, **kwargs):
@@ -64,7 +61,7 @@ def publish(topic, *args, **kwargs):
 
 
 def publish_now(topic, *args, **kwargs):
-    return _pubsub_manager.publish_now(topic, *args, **kwargs)
+    return _pubsub_manager.publish_now(topic, args=args, kwargs=kwargs)
 
 
 def subscribe(topic, task):

@@ -1,4 +1,4 @@
-from .pubsub import publish_now, publish, subscribe, unsubscribe
+from .pubsub import publish, publish_now, subscribe, unsubscribe
 
 __all__ = [
     "publish_now",
