@@ -28,9 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           MATRIX=$(python .github/workflows/resolve_versions.py matrix -c "$PY_VERSIONS" -o "$OS_NAMES" -n "celery" -s "$CELERY_VERSIONS")
           echo "::set-output name=matrix::$MATRIX"
+          INV_MATRIX=$(python .github/workflows/resolve_versions.py matrix -c "$PY_VERSIONS" -o "$OS_NAMES" -n "celery" -s "$CELERY_VERSIONS" --invert)
+          echo "::set-output name=inverted_matrix::$INV_MATRIX"
 
   build:
-    if: ${{ matrix.skipped != 'true' }}
     name: Test on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
     needs: matrix-builder
     runs-on: ${{ matrix.os }}
@@ -142,11 +143,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
   skipped:
-    if: ${{ matrix.skipped == true }}
     name: Skipping on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
     needs: matrix-builder
     strategy:
-      matrix: ${{fromJSON(needs.matrix-builder.outputs.matrix)}}
+      matrix: ${{fromJSON(needs.matrix-builder.outputs.inverted_matrix)}}
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
