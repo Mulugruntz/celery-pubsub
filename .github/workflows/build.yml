@@ -144,6 +144,10 @@ jobs:
   skipped:
     if: ${{ matrix.skipped == true }}
     name: Skipping on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
+    needs: matrix-builder
+    strategy:
+      matrix: ${{fromJSON(needs.matrix-builder.outputs.matrix)}}
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
 
