@@ -45,16 +45,16 @@ jobs:
       id: badges
       run: |
         CELERY_MAJOR=$(echo "${{ matrix.celery }}" | sed -r 's/^([^.]+).*$/\1/; s/^[^0-9]*([0-9]+).*$/\1/')
-        echo "##[set-output name=celery;]$CELERY_MAJOR"
-        echo ::set-output name=source_name::${GITHUB_REF#refs/*/}
-        echo ::set-output name=source_branch::${GITHUB_REF#refs/heads/}
-        echo ::set-output name=source_tag::${GITHUB_REF#refs/tags/}
+        echo "celery=${CELERY_MAJOR}" >> $GITHUB_OUTPUT
+        echo "source_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        echo "source_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        echo "source_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         [[ "${{ matrix.python-version }}" == pypy* ]] \
-            && echo "##[set-output name=python;]$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" \
-            || echo "##[set-output name=python;]${{ matrix.python-version }}"
-        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "##[set-output name=platform;]linux" || echo "Not on linux"
-        [[ "${{ matrix.os }}" == windows* ]] && echo "##[set-output name=platform;]windows" || echo "Not on window"
-        [[ "${{ matrix.os }}" == macOS* ]] && echo "##[set-output name=platform;]apple" || echo "Not on macOS"
+            && echo "python=$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" >> $GITHUB_OUTPUT \
+            || echo "python=${{ matrix.python-version }}" >> $GITHUB_OUTPUT
+        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "platform=linux" >> $GITHUB_OUTPUT || echo "Not on linux"
+        [[ "${{ matrix.os }}" == windows* ]] && echo "platform=windows" >> $GITHUB_OUTPUT || echo "Not on window"
+        [[ "${{ matrix.os }}" == macOS* ]] && echo "platform=apple" >> $GITHUB_OUTPUT || echo "Not on macOS"
 
     - name: Badge Creation (master) (skipped)
       uses: RubbaBoy/BYOB@v1.2.1
@@ -134,16 +134,16 @@ jobs:
       id: badges
       run: |
         CELERY_MAJOR=$(echo "${{ matrix.celery }}" | sed -r 's/^([^.]+).*$/\1/; s/^[^0-9]*([0-9]+).*$/\1/')
-        echo "##[set-output name=celery;]$CELERY_MAJOR"
-        echo ::set-output name=source_name::${GITHUB_REF#refs/*/}
-        echo ::set-output name=source_branch::${GITHUB_REF#refs/heads/}
-        echo ::set-output name=source_tag::${GITHUB_REF#refs/tags/}
+        echo "celery=${CELERY_MAJOR}" >> $GITHUB_OUTPUT
+        echo "source_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        echo "source_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        echo "source_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         [[ "${{ matrix.python-version }}" == pypy* ]] \
-            && echo "##[set-output name=python;]$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" \
-            || echo "##[set-output name=python;]${{ matrix.python-version }}"
-        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "##[set-output name=platform;]linux" || echo "Not on linux"
-        [[ "${{ matrix.os }}" == windows* ]] && echo "##[set-output name=platform;]windows" || echo "Not on window"
-        [[ "${{ matrix.os }}" == macOS* ]] && echo "##[set-output name=platform;]apple" || echo "Not on macOS"
+            && echo "python=$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" >> $GITHUB_OUTPUT \
+            || echo "python=${{ matrix.python-version }}" >> $GITHUB_OUTPUT
+        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "platform=linux" >> $GITHUB_OUTPUT || echo "Not on linux"
+        [[ "${{ matrix.os }}" == windows* ]] && echo "platform=windows" >> $GITHUB_OUTPUT || echo "Not on window"
+        [[ "${{ matrix.os }}" == macOS* ]] && echo "platform=apple" >> $GITHUB_OUTPUT || echo "Not on macOS"
 
     - name: Badge Creation (master) (success)
       uses: RubbaBoy/BYOB@v1.2.1
