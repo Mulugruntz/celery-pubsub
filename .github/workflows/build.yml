@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      inverted_matrix: ${{ steps.set-matrix.outputs.inverted_matrix }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
