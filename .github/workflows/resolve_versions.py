@@ -130,12 +130,30 @@ def process_matrix(args: Namespace) -> None:
                 )
                 and all(cv.startswith("3") for cv in compatible_versions)
             ):
+                output["include"].append(
+                    {
+                        "python-version": c,
+                        "os": o,
+                        "celery": s,
+                        "skipped": True,
+                    }
+                )
                 continue
             output["include"].append(
                 {
                     "python-version": c,
                     "os": o,
                     "celery": s,
+                    "skipped": False,
+                }
+            )
+        else:
+            output["include"].append(
+                {
+                    "python-version": c,
+                    "os": o,
+                    "celery": s,
+                    "skipped": True,
                 }
             )
     print(json.dumps(output))

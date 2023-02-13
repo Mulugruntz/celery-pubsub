@@ -30,6 +30,7 @@ jobs:
           echo "::set-output name=matrix::$MATRIX"
 
   build:
+    if: ${{ matrix.skipped != 'true' }}
     name: Test on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
     needs: matrix-builder
     runs-on: ${{ matrix.os }}
@@ -39,16 +40,19 @@ jobs:
     timeout-minutes: 5
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
+
     - name: Show system
       run: |
         python --version
         uname -a
         lsb_release -a
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -56,6 +60,7 @@ jobs:
         pip install -r requirements_test.txt
         pip install "celery${{ matrix.celery }}"
         pip install pytest-github-actions-annotate-failures
+
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -63,10 +68,12 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude .github
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude .github
+
     - name: Test with pytest
       run: |
         coverage run -m pytest -v -s tests
         coverage report
+
     - name: Code Climate Coverage Action
       uses: paambaati/codeclimate-action@v2.7.5
       env:
@@ -74,6 +81,7 @@ jobs:
       with:
         coverageCommand: coverage xml
         debug: true
+
     - name: Prepare badges
       id: badges
       run: |
@@ -88,23 +96,90 @@ jobs:
         [[ "${{ matrix.os }}" == ubuntu* ]] && echo "##[set-output name=platform;]linux" || echo "Not on linux"
         [[ "${{ matrix.os }}" == windows* ]] && echo "##[set-output name=platform;]windows" || echo "Not on window"
         [[ "${{ matrix.os }}" == macOS* ]] && echo "##[set-output name=platform;]apple" || echo "Not on macOS"
-    - name: Badge Creation (master)
+
+    - name: Badge Creation (master) (success)
       uses: RubbaBoy/BYOB@v1.2.1
-      if: github.event.pull_request.merged == true
+      if: github.event.pull_request.merged == true && steps.badges.outcome == 'success'
       with:
         NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
         ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
-        LABEL: "Python ${{ steps.badges.outputs.python }}"
-        STATUS: "Celery ${{ steps.badges.outputs.celery }}"
+        LABEL: "celery-pubsub (in master)"
+        STATUS: "Supported"
         COLOR: green
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
-    - name: Badge Creation (tag)
+
+    - name: Badge Creation (master) (failure)
       uses: RubbaBoy/BYOB@v1.2.1
-      if: github.event_name == 'push' && github.ref_type == 'tag'
+      if: github.event.pull_request.merged == true && steps.badges.outcome != 'success'
+      with:
+        NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "celery-pubsub (in master)"
+        STATUS: "Failed"
+        COLOR: red
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
+
+    - name: Badge Creation (tag) (success)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome == 'success'
       with:
         NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
         ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
-        LABEL: "Python ${{ steps.badges.outputs.python }}"
-        STATUS: "Celery ${{ steps.badges.outputs.celery }}"
+        LABEL: "celery-pubsub ${{ steps.badges.outputs.source_tag }}"
+        STATUS: "Supported"
         COLOR: green
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
+
+    - name: Badge Creation (tag) (failure)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome != 'success'
+      with:
+        NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "celery-pubsub ${{ steps.badges.outputs.source_tag }}"
+        STATUS: "Failed"
+        COLOR: red
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
+
+  skipped:
+    if: ${{ matrix.skipped == true }}
+    name: Skipping on Python ${{ matrix.python-version }} and ${{ matrix.os }} with celery${{ matrix.celery }}
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Prepare badges
+      id: badges
+      run: |
+        CELERY_MAJOR=$(echo "${{ matrix.celery }}" | sed -r 's/^([^.]+).*$/\1/; s/^[^0-9]*([0-9]+).*$/\1/')
+        echo "##[set-output name=celery;]$CELERY_MAJOR"
+        echo ::set-output name=source_name::${GITHUB_REF#refs/*/}
+        echo ::set-output name=source_branch::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=source_tag::${GITHUB_REF#refs/tags/}
+        [[ "${{ matrix.python-version }}" == pypy* ]] \
+            && echo "##[set-output name=python;]$(echo "${{ matrix.python-version }}" | cut -d '-' -f1-2)" \
+            || echo "##[set-output name=python;]${{ matrix.python-version }}"
+        [[ "${{ matrix.os }}" == ubuntu* ]] && echo "##[set-output name=platform;]linux" || echo "Not on linux"
+        [[ "${{ matrix.os }}" == windows* ]] && echo "##[set-output name=platform;]windows" || echo "Not on window"
+        [[ "${{ matrix.os }}" == macOS* ]] && echo "##[set-output name=platform;]apple" || echo "Not on macOS"
+
+    - name: Badge Creation (master) (skipped)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event.pull_request.merged == true && steps.badges.outcome == 'success'
+      with:
+        NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "celery-pubsub (in master)"
+        STATUS: "Unsupported"
+        COLOR: yellow
+        GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
+
+    - name: Badge Creation (tag) (skipped)
+      uses: RubbaBoy/BYOB@v1.2.1
+      if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome != 'success'
+      with:
+        NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
+        ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
+        LABEL: "celery-pubsub ${{ steps.badges.outputs.source_tag }}"
+        STATUS: "Unsupported"
+        COLOR: yellow
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
