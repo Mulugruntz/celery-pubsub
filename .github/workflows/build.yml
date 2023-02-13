@@ -56,7 +56,7 @@ jobs:
         [[ "${{ matrix.os }}" == windows* ]] && echo "platform=windows" >> $GITHUB_OUTPUT || echo "Not on window"
         [[ "${{ matrix.os }}" == macOS* ]] && echo "platform=apple" >> $GITHUB_OUTPUT || echo "Not on macOS"
 
-    - name: Badge Creation (master) (skipped)
+    - name: Badge Creation (master) (unsupported)
       uses: RubbaBoy/BYOB@v1.3.0
       if: github.event.pull_request.merged == true && steps.badges.outcome == 'success'
       with:
@@ -67,9 +67,9 @@ jobs:
         COLOR: yellow
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
-    - name: Badge Creation (tag) (skipped)
+    - name: Badge Creation (tag) (unsupported)
       uses: RubbaBoy/BYOB@v1.3.0
-      if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome != 'success'
+      if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome == 'success'
       with:
         NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
         ICON: 'https://simpleicons.vercel.app/${{ steps.badges.outputs.platform }}/ffffff'
