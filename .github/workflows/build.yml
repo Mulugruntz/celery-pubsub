@@ -57,7 +57,7 @@ jobs:
         [[ "${{ matrix.os }}" == macOS* ]] && echo "platform=apple" >> $GITHUB_OUTPUT || echo "Not on macOS"
 
     - name: Badge Creation (master) (skipped)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event.pull_request.merged == true && steps.badges.outcome == 'success'
       with:
         NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
@@ -68,7 +68,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
     - name: Badge Creation (tag) (skipped)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome != 'success'
       with:
         NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
@@ -123,7 +123,7 @@ jobs:
         coverage report
 
     - name: Code Climate Coverage Action
-      uses: paambaati/codeclimate-action@v2.7.5
+      uses: paambaati/codeclimate-action@v3.2.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
@@ -146,7 +146,7 @@ jobs:
         [[ "${{ matrix.os }}" == macOS* ]] && echo "platform=apple" >> $GITHUB_OUTPUT || echo "Not on macOS"
 
     - name: Badge Creation (master) (success)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event.pull_request.merged == true && steps.badges.outcome == 'success'
       with:
         NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
@@ -157,7 +157,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
     - name: Badge Creation (master) (failure)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event.pull_request.merged == true && steps.badges.outcome != 'success'
       with:
         NAME: m_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
@@ -168,7 +168,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
     - name: Badge Creation (tag) (success)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome == 'success'
       with:
         NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
@@ -179,7 +179,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.BADGES_TOKEN }}
 
     - name: Badge Creation (tag) (failure)
-      uses: RubbaBoy/BYOB@v1.2.1
+      uses: RubbaBoy/BYOB@v1.3.0
       if: github.event_name == 'push' && github.ref_type == 'tag' && steps.badges.outcome != 'success'
       with:
         NAME: ${{ steps.badges.outputs.source_tag }}_${{ steps.badges.outputs.platform }}_${{ steps.badges.outputs.python }}_celery${{ steps.badges.outputs.celery }}
