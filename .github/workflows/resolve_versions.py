@@ -81,6 +81,7 @@ def parse_args() -> Namespace:
     )
     parser_matrix.add_argument("-n", "--package-name", type=str, help="Package name")
     parser_matrix.add_argument("-s", "--specifiers", type=str, help="Specifiers")
+    parser_matrix.add_argument("--invert", action="store_true", default=False, help="Invert matrix (only show the skipped ones)")
 
     return parser.parse_args()
 
@@ -113,6 +114,7 @@ def process_matrix(args: Namespace) -> None:
     operating_systems = json.loads(args.operating_systems)
     package_name = args.package_name
     specifiers = json.loads(args.specifiers)
+    is_inverted = args.invert
     matrix = itertools.product(
         python_codes, operating_systems, [package_name], specifiers
     )
@@ -130,7 +132,24 @@ def process_matrix(args: Namespace) -> None:
                 )
                 and all(cv.startswith("3") for cv in compatible_versions)
             ):
+                if is_inverted:
+                    output["include"].append(
+                        {
+                            "python-version": c,
+                            "os": o,
+                            "celery": s,
+                        }
+                    )
                 continue
+            if not is_inverted:
+                output["include"].append(
+                    {
+                        "python-version": c,
+                        "os": o,
+                        "celery": s,
+                    }
+                )
+        elif is_inverted:
             output["include"].append(
                 {
                     "python-version": c,

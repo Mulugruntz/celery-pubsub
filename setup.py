@@ -5,9 +5,9 @@ import setuptools.command.test
 
 def long_description():
     try:
-        return codecs.open("README.rst", "r", "utf-8").read()
+        return codecs.open("README.md", "r", "utf-8").read()
     except IOError:
-        return "Long description error: Missing README.rst file"
+        return "Long description error: Missing README.md file"
 
 
 def _strip_comments(line):
@@ -34,14 +34,14 @@ def tests_require():
 setuptools.setup(
     name="celery-pubsub",
     packages=["celery_pubsub"],
-    version="1.0.0",
+    version="1.0.1",
     description="A Publish and Subscribe library for Celery",
     long_description=long_description(),
     author="Samuel GIFFARD",
     author_email="mulugruntz@gmail.com",
     license="MIT",
     url="https://github.com/Mulugruntz/celery-pubsub",
-    download_url="https://github.com/Mulugruntz/celery-pubsub/tarball/1.0.0",
+    download_url="https://github.com/Mulugruntz/celery-pubsub/tarball/1.0.1",
     keywords=["celery", "publish", "subscribe", "pubsub"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
