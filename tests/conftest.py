@@ -14,7 +14,6 @@ if celery.__version__ < "4.0.0":  # pragma: no cover
     def celery_worker():
         pass
 
-
 else:  # pragma: no cover
     task = celery.shared_task
 
