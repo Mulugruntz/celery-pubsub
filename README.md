@@ -1,4 +1,4 @@
-# celery-pubsub 1.0.1
+# celery-pubsub 1.0.2
 
 
 [![image](https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master)](https://travis-ci.org/Mulugruntz/celery-pubsub)
