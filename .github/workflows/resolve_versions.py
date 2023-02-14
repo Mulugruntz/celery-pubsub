@@ -81,7 +81,12 @@ def parse_args() -> Namespace:
     )
     parser_matrix.add_argument("-n", "--package-name", type=str, help="Package name")
     parser_matrix.add_argument("-s", "--specifiers", type=str, help="Specifiers")
-    parser_matrix.add_argument("--invert", action="store_true", default=False, help="Invert matrix (only show the skipped ones)")
+    parser_matrix.add_argument(
+        "--invert",
+        action="store_true",
+        default=False,
+        help="Invert matrix (only show the skipped ones)",
+    )
 
     return parser.parse_args()
 
