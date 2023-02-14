@@ -37,6 +37,7 @@ setuptools.setup(
     version="1.0.2",
     description="A Publish and Subscribe library for Celery",
     long_description=long_description(),
+    long_description_content_type="text/markdown",
     author="Samuel GIFFARD",
     author_email="mulugruntz@gmail.com",
     license="MIT",
