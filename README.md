@@ -1,7 +1,7 @@
 # celery-pubsub 1.0.2
 
 
-[![image](https://travis-ci.org/Mulugruntz/celery-pubsub.svg?branch=master)](https://travis-ci.org/Mulugruntz/celery-pubsub)
+[![Build and Test](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml/badge.svg)](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml)
 [![Code Climate](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/gpa.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub)
 [![Test Coverage](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/coverage.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub/coverage)
 [![Issue Count](https://codeclimate.com/github/Mulugruntz/celery-pubsub/badges/issue_count.svg)](https://codeclimate.com/github/Mulugruntz/celery-pubsub)
