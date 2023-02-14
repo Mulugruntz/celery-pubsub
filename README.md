@@ -102,6 +102,8 @@ celery_pubsub.publish('some.very.good.test', 42)  # task 3 only
 
 ## Changelog
 
+* 1.0.2
+    * Add stubs file for type hinting.
 * 1.0.1
     * Changed `README.rst` to `README.md`.
     * Added better badges to show the supported status for each Celery & Python version. 
@@ -197,42 +199,42 @@ celery_pubsub.publish('some.very.good.test', 42)  # task 3 only
 [badge-m_linux_pypy3.6_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/m_linux_pypy-3.6_celery5/shields
 
 [//]: # (Status in tagged version)
-[badge-t_linux_2.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_2.7_celery3/shields
-[badge-t_linux_2.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_2.7_celery4/shields
-[badge-t_linux_2.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_2.7_celery5/shields
+[badge-t_linux_2.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_2.7_celery3/shields
+[badge-t_linux_2.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_2.7_celery4/shields
+[badge-t_linux_2.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_2.7_celery5/shields
 
-[badge-t_linux_3.4_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.4_celery3/shields
-[badge-t_linux_3.4_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.4_celery4/shields
-[badge-t_linux_3.4_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.4_celery5/shields
+[badge-t_linux_3.4_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.4_celery3/shields
+[badge-t_linux_3.4_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.4_celery4/shields
+[badge-t_linux_3.4_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.4_celery5/shields
 
-[badge-t_linux_3.5_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.5_celery3/shields
-[badge-t_linux_3.5_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.5_celery4/shields
-[badge-t_linux_3.5_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.5_celery5/shields
+[badge-t_linux_3.5_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.5_celery3/shields
+[badge-t_linux_3.5_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.5_celery4/shields
+[badge-t_linux_3.5_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.5_celery5/shields
 
-[badge-t_linux_3.6_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.6_celery3/shields
-[badge-t_linux_3.6_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.6_celery4/shields
-[badge-t_linux_3.6_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.6_celery5/shields
+[badge-t_linux_3.6_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.6_celery3/shields
+[badge-t_linux_3.6_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.6_celery4/shields
+[badge-t_linux_3.6_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.6_celery5/shields
 
-[badge-t_linux_3.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.7_celery3/shields
-[badge-t_linux_3.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.7_celery4/shields
-[badge-t_linux_3.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.7_celery5/shields
+[badge-t_linux_3.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.7_celery3/shields
+[badge-t_linux_3.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.7_celery4/shields
+[badge-t_linux_3.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.7_celery5/shields
 
-[badge-t_linux_3.8_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.8_celery3/shields
-[badge-t_linux_3.8_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.8_celery4/shields
-[badge-t_linux_3.8_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.8_celery5/shields
+[badge-t_linux_3.8_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.8_celery3/shields
+[badge-t_linux_3.8_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.8_celery4/shields
+[badge-t_linux_3.8_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.8_celery5/shields
 
-[badge-t_linux_3.9_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.9_celery3/shields
-[badge-t_linux_3.9_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.9_celery4/shields
-[badge-t_linux_3.9_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.9_celery5/shields
+[badge-t_linux_3.9_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.9_celery3/shields
+[badge-t_linux_3.9_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.9_celery4/shields
+[badge-t_linux_3.9_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.9_celery5/shields
 
-[badge-t_linux_3.10_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.10_celery3/shields
-[badge-t_linux_3.10_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.10_celery4/shields
-[badge-t_linux_3.10_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_3.10_celery5/shields
+[badge-t_linux_3.10_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.10_celery3/shields
+[badge-t_linux_3.10_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.10_celery4/shields
+[badge-t_linux_3.10_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_3.10_celery5/shields
 
-[badge-t_linux_pypy2.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-2.7_celery3/shields
-[badge-t_linux_pypy2.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-2.7_celery4/shields
-[badge-t_linux_pypy2.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-2.7_celery5/shields
+[badge-t_linux_pypy2.7_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-2.7_celery3/shields
+[badge-t_linux_pypy2.7_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-2.7_celery4/shields
+[badge-t_linux_pypy2.7_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-2.7_celery5/shields
 
-[badge-t_linux_pypy3.6_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-3.6_celery3/shields
-[badge-t_linux_pypy3.6_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-3.6_celery4/shields
-[badge-t_linux_pypy3.6_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.1_linux_pypy-3.6_celery5/shields
+[badge-t_linux_pypy3.6_celery3]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-3.6_celery3/shields
+[badge-t_linux_pypy3.6_celery4]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-3.6_celery4/shields
+[badge-t_linux_pypy3.6_celery5]: https://byob.yarr.is/Mulugruntz/celery-pubsub/1.0.2_linux_pypy-3.6_celery5/shields
