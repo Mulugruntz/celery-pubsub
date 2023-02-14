@@ -110,7 +110,7 @@ jobs:
         pip install pytest-github-actions-annotate-failures
 
     - name: Check with mypy
-      if: !startsWith(matrix.python-version, 'pypy') && matrix.python-version >= '3.7'
+      if: ! startsWith(matrix.python-version, 'pypy') && matrix.python-version >= '3.7'
       run: mypy
 
     - name: Lint with flake8
