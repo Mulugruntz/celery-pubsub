@@ -3,4 +3,4 @@ coverage==5.5
 
 # Only for Python 3.7+ (also exclude pypy).
 celery-types==0.14.0; python_version >= '3.7' and implementation_name != 'pypy'
-mypy==1.0.0; python_version >= '3.7' and implementation_name != 'pypy'
+mypy==1.0.1; python_version >= '3.7' and implementation_name != 'pypy'
