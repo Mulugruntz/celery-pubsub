@@ -139,6 +139,12 @@ def process_matrix(args: Namespace) -> None:
                     or c.startswith("pypy-3")
                 )
                 and all(cv.startswith("3") for cv in compatible_versions)
+            ) or (
+                # This is because inspect.getfullargspec has been removed in Python 3.11
+                # and `vine.five` 4.x was depending on it. This is fixed in 5.x.
+                n == "celery"
+                and c.replace(".", "").startswith("311")
+                and all(cv.startswith("4") for cv in compatible_versions)
             ):
                 if is_inverted:
                     output["include"].append(
