@@ -1,38 +1,64 @@
+from __future__ import annotations
+
+import typing
+
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from typing_extensions import ParamSpec
+else:
+    try:
+        from typing import ParamSpec as ParamSpec
+    except ImportError:
+        try:
+            from typing_extensions import ParamSpec as ParamSpec
+        except ImportError:
+            ParamSpec = None
+
+
+from typing import Callable, TypeVar
+
 import pytest
 
 import celery
+from celery import Task
+from celery.worker import WorkController
+
 from celery_pubsub import subscribe, unsubscribe
+from pkg_resources import get_distribution, parse_version
 
+P = ParamSpec("P")
+R = TypeVar("R")
+task: Callable[..., Callable[[Callable[P, R]], Task[P, R]]]
 
-if celery.__version__ < "4.0.0":  # pragma: no cover
-    celery.current_app.conf.update(
-        CELERY_ALWAYS_EAGER=True,
-    )
-    task = celery.task
+if not typing.TYPE_CHECKING:
+    if get_distribution("celery").parsed_version < parse_version("4.0.0"):
+        celery.current_app.conf.update(
+            CELERY_ALWAYS_EAGER=True,
+        )
+        task = celery.task
 
-    @pytest.fixture
-    def celery_worker():
-        pass
+        @pytest.fixture
+        def celery_worker() -> WorkController:
+            pass
 
-else:  # pragma: no cover
-    task = celery.shared_task
+    else:  # pragma: no cover
+        task = celery.shared_task
 
-    @pytest.fixture
-    def celery_config():
-        return {
-            "broker_url": "memory://",
-            "result_backend": "rpc://",
-            "broker_transport_options": {"polling_interval": 0.05},
-        }
+        @pytest.fixture(scope="session")
+        def celery_config():
+            return {
+                "broker_url": "memory://",
+                "result_backend": "rpc://",
+                "broker_transport_options": {"polling_interval": 0.05},
+            }
 
-    if celery.__version__ >= "5.0.0":
-        pytest_plugins = ["celery.contrib.pytest"]
+        if get_distribution("celery").parsed_version >= parse_version("5.0.0"):
+            pytest_plugins = ["celery.contrib.pytest"]
 
 
 @pytest.fixture(scope="session")
-def job_a():
+def job_a() -> Task[P, str]:
     @task(name="job_a")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_a: {} {}".format(args, kwargs))
         return "a"
 
@@ -40,9 +66,9 @@ def job_a():
 
 
 @pytest.fixture(scope="session")
-def job_b():
+def job_b() -> Task[P, str]:
     @task(name="job_b")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_b: {} {}".format(args, kwargs))
         return "b"
 
@@ -50,9 +76,9 @@ def job_b():
 
 
 @pytest.fixture(scope="session")
-def job_c():
+def job_c() -> Task[P, str]:
     @task(name="job_c")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_c: {} {}".format(args, kwargs))
         return "c"
 
@@ -60,9 +86,9 @@ def job_c():
 
 
 @pytest.fixture(scope="session")
-def job_d():
+def job_d() -> Task[P, str]:
     @task(name="job_d")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_d: {} {}".format(args, kwargs))
         return "d"
 
@@ -70,9 +96,9 @@ def job_d():
 
 
 @pytest.fixture(scope="session")
-def job_e():
+def job_e() -> Task[P, str]:
     @task(name="job_e")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_e: {} {}".format(args, kwargs))
         return "e"
 
@@ -80,9 +106,9 @@ def job_e():
 
 
 @pytest.fixture(scope="session")
-def job_f():
+def job_f() -> Task[P, str]:
     @task(name="job_f")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_f: {} {}".format(args, kwargs))
         return "f"
 
@@ -90,17 +116,25 @@ def job_f():
 
 
 @pytest.fixture(scope="session")
-def job_g():
+def job_g() -> Task[P, str]:
     @task(name="job_g")
-    def job(*args, **kwargs):
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_g: {} {}".format(args, kwargs))
         return "g"
 
     return job
 
 
-@pytest.fixture(scope="session")
-def subscriber(job_a, job_b, job_c, job_d, job_e, job_f, job_g):
+@pytest.fixture(scope="session", autouse=True)
+def subscriber(
+    job_a: Task[P, str],
+    job_b: Task[P, str],
+    job_c: Task[P, str],
+    job_d: Task[P, str],
+    job_e: Task[P, str],
+    job_f: Task[P, str],
+    job_g: Task[P, str],
+) -> None:
     subscribe("index.high", job_a)
     subscribe("index.low", job_b)
     subscribe("index", job_c)
