@@ -34,7 +34,7 @@ def tests_require():
 setuptools.setup(
     name="celery-pubsub",
     packages=["celery_pubsub"],
-    version="2.0.0",
+    version="2.0.0-beta1",
     description="A Publish and Subscribe library for Celery",
     long_description=long_description(),
     long_description_content_type="text/markdown",
@@ -42,7 +42,7 @@ setuptools.setup(
     author_email="mulugruntz@gmail.com",
     license="MIT",
     url="https://github.com/Mulugruntz/celery-pubsub",
-    download_url="https://github.com/Mulugruntz/celery-pubsub/tarball/2.0.0",
+    download_url="https://github.com/Mulugruntz/celery-pubsub/tarball/2.0.0-beta1",
     keywords=["celery", "publish", "subscribe", "pubsub"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
