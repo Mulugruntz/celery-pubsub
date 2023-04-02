@@ -1,4 +1,15 @@
-from typing import ParamSpec, TypeVar
+import typing
+
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from typing_extensions import ParamSpec
+else:
+    try:
+        from typing import ParamSpec as ParamSpec
+    except ImportError:
+        try:
+            from typing_extensions import ParamSpec as ParamSpec
+        except ImportError:
+            ParamSpec = None
 
 from celery import Task
 from celery.worker import WorkController
@@ -6,7 +17,7 @@ from celery.worker import WorkController
 from celery_pubsub import publish, unsubscribe, publish_now
 
 P = ParamSpec("P")
-R = TypeVar("R")
+R = typing.TypeVar("R")
 
 
 def test_subscription(job_c: Task[P, str], celery_worker: WorkController) -> None:

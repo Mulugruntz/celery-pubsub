@@ -2,7 +2,18 @@
 
 from __future__ import annotations
 
-from typing import Any, TypeAlias
+import typing
+
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from typing_extensions import TypeAlias
+else:
+    try:
+        from typing import TypeAlias as TypeAlias
+    except ImportError:
+        try:
+            from typing_extensions import TypeAlias as TypeAlias
+        except ImportError:
+            TypeAlias = None
 
 import celery
 import re
@@ -18,10 +29,10 @@ from celery import Task, group
 from celery.result import AsyncResult, EagerResult
 
 
-PA: TypeAlias = Any  # ParamSpec args
-PK: TypeAlias = Any  # ParamSpec kwargs
-P: TypeAlias = Any  # ParamSpec
-R: TypeAlias = Any  # Return type
+PA: TypeAlias = typing.Any  # ParamSpec args
+PK: TypeAlias = typing.Any  # ParamSpec kwargs
+P: TypeAlias = typing.Any  # ParamSpec
+R: TypeAlias = typing.Any  # Return type
 
 
 class PubSubManager:

@@ -1,6 +1,20 @@
 from __future__ import annotations
 
-from typing import Any, Callable, ParamSpec, TypeVar, TYPE_CHECKING
+import typing
+
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from typing_extensions import ParamSpec
+else:
+    try:
+        from typing import ParamSpec as ParamSpec
+    except ImportError:
+        try:
+            from typing_extensions import ParamSpec as ParamSpec
+        except ImportError:
+            ParamSpec = None
+
+
+from typing import Callable, TypeVar
 
 import pytest
 
@@ -15,7 +29,7 @@ P = ParamSpec("P")
 R = TypeVar("R")
 task: Callable[..., Callable[[Callable[P, R]], Task[P, R]]]
 
-if not TYPE_CHECKING:
+if not typing.TYPE_CHECKING:
     if get_distribution("celery").parsed_version < parse_version("4.0.0"):
         celery.current_app.conf.update(
             CELERY_ALWAYS_EAGER=True,
