@@ -22,7 +22,7 @@ jobs:
           architecture: x64
       - id: set-matrix
         env:
-          PY_VERSIONS: "[\"2.7\", \"3.5\", \"3.6\", \"3.7\", \"3.8\", \"3.9\", \"3.10\", \"pypy-2.7-v7.3.5\", \"pypy-3.6-v7.3.3\", \"pypy-3.7-v7.3.5\"]"
+          PY_VERSIONS: "[\"3.7\", \"3.8\", \"3.9\", \"3.10\", \"pypy-3.8-v7.3.11\", \"pypy-3.9-v7.3.11\"]"
           OS_NAMES: "[\"ubuntu-20.04\"]"  #, windows-latest, macOS-latest]
           CELERY_VERSIONS: "[\">=3.1.0,<4.0.0\", \">=4.0.0,<5.0.0\", \">=5.0.0,<6.0.0\"]"
         run: |
