@@ -1,7 +1,7 @@
 pytest
 coverage==5.5
 black==23.3.0
-typing-extensions==4.5.0
+typing-extensions==4.6.0
 
 # Only for CPython (exclude pypy).
 celery-types==0.14.0; implementation_name != 'pypy'
