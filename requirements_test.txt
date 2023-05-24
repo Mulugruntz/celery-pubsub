@@ -1,5 +1,5 @@
 pytest
-coverage==5.5
+coverage==7.2.6
 black==23.3.0
 typing-extensions==4.5.0
 
