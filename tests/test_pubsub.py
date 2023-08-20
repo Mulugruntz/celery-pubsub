@@ -40,12 +40,12 @@ def test_subscription(job_c: Task[P, str], celery_worker: WorkController) -> Non
 
 
 def test_subscription_decorator(job_c: Task[P, str], celery_worker: WorkController) -> None:
-    from celery_pubsub import publish, subscribe
+    from celery_pubsub import publish, subscribe_to
 
     res = publish("dummy", 4, 8, a15=16, a23=42).get()
     assert sorted(res) == sorted(["e"])
 
-    job_c = subscribe("dummy")(job_c)
+    job_c = subscribe_to("dummy")(job_c)
 
     res = publish("dummy", 4, 8, a15=16, a23=42).get()
     assert sorted(res) == sorted(["e", "c"])

@@ -92,19 +92,16 @@ def publish_now(topic: str, *args: PA, **kwargs: PK) -> EagerResult[R]:
     return _pubsub_manager.publish_now(topic, *args, **kwargs)
 
 
-def subscribe(
-    topic: str, task: typing.Optional[Task[P, R]] = None
-) -> typing.Optional[typing.Callable[[Task[P, R]], Task[P, R]]]:
-    if task is None:
+def subscribe(topic: str, task: Task[P, R]) -> None:
+    return _pubsub_manager.subscribe(topic, task)
 
-        def _wrapper(task: Task[P, R]) -> Task[P, R]:
-            _pubsub_manager.subscribe(topic, task)
-            return task
 
-        return _wrapper
-    else:
+def subscribe_to(topic: str) -> typing.Callable[[Task[P, R]], Task[P, R]]:
+    def _wrapper(task: Task[P, R]) -> Task[P, R]:
         _pubsub_manager.subscribe(topic, task)
-        return None
+        return task
+
+    return _wrapper
 
 
 def unsubscribe(topic: str, task: Task[P, R]) -> None:
