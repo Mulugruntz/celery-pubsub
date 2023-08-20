@@ -39,6 +39,23 @@ def test_subscription(job_c: Task[P, str], celery_worker: WorkController) -> Non
     assert sorted(res) == sorted(["e"])
 
 
+def test_subscription_decorator(job_c: Task[P, str], celery_worker: WorkController) -> None:
+    from celery_pubsub import publish, subscribe
+
+    res = publish("dummy", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e"])
+
+    job_c = subscribe("dummy")(job_c)
+
+    res = publish("dummy", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e", "c"])
+
+    unsubscribe("dummy", job_c)
+
+    res = publish("dummy", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e"])
+
+
 def test_1(celery_worker: WorkController) -> None:
     res = publish("index.low.test", 4, 8, a15=16, a23=42).get()
     assert sorted(res) == sorted(["d", "e", "f", "g"])
