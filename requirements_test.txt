@@ -1,4 +1,4 @@
-pytest
+pytest==7.4.1
 coverage==5.5
 black==23.3.0
 typing-extensions==4.5.0
