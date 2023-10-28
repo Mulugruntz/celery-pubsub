@@ -16,14 +16,13 @@ else:
 
 from typing import Callable, TypeVar
 
-import pytest
-
 import celery
+import pytest
 from celery import Task
 from celery.worker import WorkController
-
-from celery_pubsub import subscribe, unsubscribe
 from pkg_resources import get_distribution, parse_version
+
+from celery_pubsub import subscribe, subscribe_to
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -57,12 +56,12 @@ if not typing.TYPE_CHECKING:
 
 @pytest.fixture(scope="session")
 def job_a() -> Task[P, str]:
-    @task(name="job_a")
-    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+    @subscribe_to(topic="index.high")
+    def job_a(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_a: {} {}".format(args, kwargs))
         return "a"
 
-    return job
+    return job_a
 
 
 @pytest.fixture(scope="session")
@@ -77,12 +76,12 @@ def job_b() -> Task[P, str]:
 
 @pytest.fixture(scope="session")
 def job_c() -> Task[P, str]:
-    @task(name="job_c")
-    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+    @subscribe_to(topic="index")
+    def job_c(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_c: {} {}".format(args, kwargs))
         return "c"
 
-    return job
+    return job_c
 
 
 @pytest.fixture(scope="session")
@@ -135,9 +134,7 @@ def subscriber(
     job_f: Task[P, str],
     job_g: Task[P, str],
 ) -> None:
-    subscribe("index.high", job_a)
     subscribe("index.low", job_b)
-    subscribe("index", job_c)
     subscribe("index.#", job_d)
     subscribe("#", job_e)
     subscribe("index.*.test", job_f)
