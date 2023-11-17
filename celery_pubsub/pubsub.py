@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import typing
+import datetime
+
 
 if typing.TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import TypeAlias
@@ -41,7 +43,7 @@ class PubSubManager:
         self.subscribed: set[tuple[str, re.Pattern[str], Task[P, R]]] = set()
         self.jobs: dict[str, group] = {}
 
-    def publish(self, topic: str, *args: PA, **kwargs: PK,eta: Optional[datetime] = None) -> AsyncResult[R]:
+    def publish(self, topic: str,eta: typing.Optional[datetime] = None, *args: PA, **kwargs: PK) -> AsyncResult[R]:
         result = self.get_jobs(topic).delay(*args, **kwargs)
         return result
 
@@ -84,7 +86,7 @@ class PubSubManager:
 _pubsub_manager: PubSubManager = PubSubManager()
 
 
-def publish(topic: str, *args: PA, **kwargs: PK,eta: Optional[datetime] = None) -> AsyncResult[R]:
+def publish(topic: str,eta: typing.Optional[datetime] = None, *args: PA, **kwargs: PK) -> AsyncResult[R]:
     return _pubsub_manager.publish(topic, *args, **kwargs,eta)
 
 
