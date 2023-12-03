@@ -35,7 +35,7 @@ PK: TypeAlias = typing.Any  # ParamSpec kwargs
 P: TypeAlias = typing.Any  # ParamSpec
 R: TypeAlias = typing.Any  # Return type
 
-task: typing.Callable[..., typing.Callable[[typing.Callable[P, R]], Task[P, R]]]
+task: typing.Callable[..., typing.Callable[[typing.Callable[[P], R]], Task[P, R]]]
 
 if get_distribution("celery").parsed_version < parse_version("4.0.0"):
     task = celery.task  # type: ignore
