@@ -5,8 +5,6 @@ from __future__ import annotations
 import re
 import typing
 
-from pkg_resources import get_distribution, parse_version
-
 if typing.TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import TypeAlias
 else:
@@ -35,12 +33,7 @@ PK: TypeAlias = typing.Any  # ParamSpec kwargs
 P: TypeAlias = typing.Any  # ParamSpec
 R: TypeAlias = typing.Any  # Return type
 
-task: typing.Callable[..., typing.Callable[[typing.Callable[[P], R]], Task[P, R]]]
-
-if get_distribution("celery").parsed_version < parse_version("4.0.0"):
-    task = celery.task  # type: ignore
-else:
-    task = celery.shared_task
+task: typing.Callable[..., typing.Callable[[typing.Callable[[P], R]], Task[P, R]]] = celery.shared_task
 
 
 class PubSubManager:
