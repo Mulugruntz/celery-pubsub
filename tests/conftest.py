@@ -22,7 +22,6 @@ import celery
 from celery import Task
 
 from celery_pubsub import subscribe, subscribe_to
-from celery_pubsub import subscribe
 from pkg_resources import get_distribution, parse_version
 
 P = ParamSpec("P")
@@ -136,22 +135,22 @@ def job_i() -> Task[P, str]:
 
 
 @pytest.fixture(scope="session")
-def job_l() -> Task[P, str]:
+def job_j() -> Task[P, str]:
     @subscribe_to(topic="foo.bar.baz")
-    @task(name="job_l")
+    @task(name="job_j")
     def job(*args: P.args, **kwargs: P.kwargs) -> str:
-        print(f"job_l: {args} {kwargs}")
-        return "l"
+        print(f"job_j: {args} {kwargs}")
+        return "j"
 
     return job
 
 
 @pytest.fixture(scope="session")
-def job_m() -> Task[P, str]:
+def job_k() -> Task[P, str]:
     @subscribe_to(topic="foo.bar")
     def job(*args: P.args, **kwargs: P.kwargs) -> str:
-        print(f"job_m: {args} {kwargs}")
-        return "m"
+        print(f"job_k: {args} {kwargs}")
+        return "k"
 
     return job
 
@@ -167,8 +166,8 @@ def subscriber(
     job_g: Task[P, str],
     job_h: Task[P, str],
     job_i: Task[P, str],
-    job_l: Task[P, str],
-    job_m: Task[P, str],
+    job_j: Task[P, str],
+    job_k: Task[P, str],
 ) -> None:
     subscribe("index.high", job_a)
     subscribe("index.low", job_b)

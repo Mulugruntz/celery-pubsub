@@ -98,14 +98,14 @@ def test_10(celery_worker: WorkController) -> None:
     from celery_pubsub import publish
 
     res = publish("foo.bar.baz", 4, 8, a15=16, a23=42).get()
-    assert sorted(res) == sorted(["e", "h", "l"])
+    assert sorted(res) == sorted(["e", "h", "j"])
 
 
 def test_11(celery_worker: WorkController) -> None:
     from celery_pubsub import publish
 
     res = publish("foo.bar", 4, 8, a15=16, a23=42).get()
-    assert sorted(res) == sorted(["e", "h", "m"])
+    assert sorted(res) == sorted(["e", "h", "k"])
 
 
 def test_subscription_redundant(
