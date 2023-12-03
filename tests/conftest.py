@@ -22,7 +22,7 @@ import celery
 from celery import Task
 from celery.worker import WorkController
 
-from celery_pubsub import subscribe, unsubscribe
+from celery_pubsub import subscribe
 from pkg_resources import get_distribution, parse_version
 
 P = ParamSpec("P")
