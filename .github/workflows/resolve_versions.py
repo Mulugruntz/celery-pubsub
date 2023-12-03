@@ -127,19 +127,7 @@ def process_matrix(args: Namespace) -> None:
     for c, o, n, s in matrix:
         compatible_versions = get_compatible_versions(c, o, n, s)
         if compatible_versions:
-            # This is because celery 3 depends on use_2to3,
-            # which is no longer supported by 3.9, 3.10 and 3.11
-            # and by newer pypy versions.
             if (
-                n == "celery"
-                and (
-                    c.replace(".", "").startswith("39")
-                    or c.replace(".", "").startswith("310")
-                    or c.replace(".", "").startswith("311")
-                    or c.startswith("pypy-3")
-                )
-                and all(cv.startswith("3") for cv in compatible_versions)
-            ) or (
                 # This is because inspect.getfullargspec has been removed in Python 3.11
                 # and `vine.five` 4.x was depending on it. This is fixed in 5.x.
                 n == "celery"
