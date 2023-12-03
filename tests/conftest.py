@@ -20,7 +20,6 @@ import pytest
 
 import celery
 from celery import Task
-from celery.worker import WorkController
 
 from celery_pubsub import subscribe
 from pkg_resources import get_distribution, parse_version
@@ -30,29 +29,18 @@ R = TypeVar("R")
 task: Callable[..., Callable[[Callable[P, R]], Task[P, R]]]
 
 if not typing.TYPE_CHECKING:
-    if get_distribution("celery").parsed_version < parse_version("4.0.0"):
-        celery.current_app.conf.update(
-            CELERY_ALWAYS_EAGER=True,
-        )
-        task = celery.task
+    task = celery.shared_task
 
-        @pytest.fixture
-        def celery_worker() -> WorkController:
-            pass
+    @pytest.fixture(scope="session")
+    def celery_config():
+        return {
+            "broker_url": "memory://",
+            "result_backend": "rpc://",
+            "broker_transport_options": {"polling_interval": 0.05},
+        }
 
-    else:  # pragma: no cover
-        task = celery.shared_task
-
-        @pytest.fixture(scope="session")
-        def celery_config():
-            return {
-                "broker_url": "memory://",
-                "result_backend": "rpc://",
-                "broker_transport_options": {"polling_interval": 0.05},
-            }
-
-        if get_distribution("celery").parsed_version >= parse_version("5.0.0"):
-            pytest_plugins = ["celery.contrib.pytest"]
+    if get_distribution("celery").parsed_version >= parse_version("5.0.0"):
+        pytest_plugins = ["celery.contrib.pytest"]
 
 
 @pytest.fixture(scope="session")

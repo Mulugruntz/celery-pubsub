@@ -103,6 +103,7 @@ celery_pubsub.publish('some.very.good.test', 42)  # task 3 only
 * 2.0.0
     * Drop support for CPython 2.7, 3.4, 3.5, 3.6
     * Drop support for Pypy 2.7 and 3.6.
+    * Drop support for Celery 3.
     * Add support for Pypy 3.8 and 3.9.
     * Add support for CPython 3.11.
     * Type hints are now directly in the code. No more stubs files.
