@@ -1,4 +1,4 @@
-# celery-pubsub 2.0.0-beta3
+# celery-pubsub 2.0.0-beta4
 
 
 [![Build and Test](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml/badge.svg)](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml)
@@ -11,15 +11,15 @@ Publish and Subscribe with Celery
 
 ## Supported dependencies
 
-| Python   | Celery 3                                                              | Celery 4                                                              | Celery 5                                                              |
-|----------|-----------------------------------------------------------------------|-----------------------------------------------------------------------|-----------------------------------------------------------------------|
-| 3.7      | ![][badge-m_linux_3.7_celery3] ![][badge-t_linux_3.7_celery3]         | ![][badge-m_linux_3.7_celery4] ![][badge-t_linux_3.7_celery4]         | ![][badge-m_linux_3.7_celery5] ![][badge-t_linux_3.7_celery5]         |
-| 3.8      | ![][badge-m_linux_3.8_celery3] ![][badge-t_linux_3.8_celery3]         | ![][badge-m_linux_3.8_celery4] ![][badge-t_linux_3.8_celery4]         | ![][badge-m_linux_3.8_celery5] ![][badge-t_linux_3.8_celery5]         |
-| 3.9      | ![][badge-m_linux_3.9_celery3] ![][badge-t_linux_3.9_celery3]         | ![][badge-m_linux_3.9_celery4] ![][badge-t_linux_3.9_celery4]         | ![][badge-m_linux_3.9_celery5] ![][badge-t_linux_3.9_celery5]         |
-| 3.10     | ![][badge-m_linux_3.10_celery3] ![][badge-t_linux_3.10_celery3]       | ![][badge-m_linux_3.10_celery4] ![][badge-t_linux_3.10_celery4]       | ![][badge-m_linux_3.10_celery5] ![][badge-t_linux_3.10_celery5]       |
-| 3.11     | ![][badge-m_linux_3.11_celery3] ![][badge-t_linux_3.11_celery3]       | ![][badge-m_linux_3.11_celery4] ![][badge-t_linux_3.11_celery4]       | ![][badge-m_linux_3.11_celery5] ![][badge-t_linux_3.11_celery5]       |
-| pypy 3.8 | ![][badge-m_linux_pypy3.8_celery3] ![][badge-t_linux_pypy3.8_celery3] | ![][badge-m_linux_pypy3.8_celery4] ![][badge-t_linux_pypy3.8_celery4] | ![][badge-m_linux_pypy3.8_celery5] ![][badge-t_linux_pypy3.8_celery5] |
-| pypy 3.9 | ![][badge-m_linux_pypy3.9_celery3] ![][badge-t_linux_pypy3.9_celery3] | ![][badge-m_linux_pypy3.9_celery4] ![][badge-t_linux_pypy3.9_celery4] | ![][badge-m_linux_pypy3.9_celery5] ![][badge-t_linux_pypy3.9_celery5] |
+| Python   | Celery 4                                                              | Celery 5                                                              |
+|----------|-----------------------------------------------------------------------|-----------------------------------------------------------------------|
+| 3.7      | ![][badge-m_linux_3.7_celery4] ![][badge-t_linux_3.7_celery4]         | ![][badge-m_linux_3.7_celery5] ![][badge-t_linux_3.7_celery5]         |
+| 3.8      | ![][badge-m_linux_3.8_celery4] ![][badge-t_linux_3.8_celery4]         | ![][badge-m_linux_3.8_celery5] ![][badge-t_linux_3.8_celery5]         |
+| 3.9      | ![][badge-m_linux_3.9_celery4] ![][badge-t_linux_3.9_celery4]         | ![][badge-m_linux_3.9_celery5] ![][badge-t_linux_3.9_celery5]         |
+| 3.10     | ![][badge-m_linux_3.10_celery4] ![][badge-t_linux_3.10_celery4]       | ![][badge-m_linux_3.10_celery5] ![][badge-t_linux_3.10_celery5]       |
+| 3.11     | ![][badge-m_linux_3.11_celery4] ![][badge-t_linux_3.11_celery4]       | ![][badge-m_linux_3.11_celery5] ![][badge-t_linux_3.11_celery5]       |
+| pypy 3.8 | ![][badge-m_linux_pypy3.8_celery4] ![][badge-t_linux_pypy3.8_celery4] | ![][badge-m_linux_pypy3.8_celery5] ![][badge-t_linux_pypy3.8_celery5] |
+| pypy 3.9 | ![][badge-m_linux_pypy3.9_celery4] ![][badge-t_linux_pypy3.9_celery4] | ![][badge-m_linux_pypy3.9_celery5] ![][badge-t_linux_pypy3.9_celery5] |
 
 
 ## Basic usage
@@ -41,6 +41,17 @@ def my_task_2(*args, **kwargs):
 # First, let's subscribe
 celery_pubsub.subscribe('some.topic', my_task_1)
 celery_pubsub.subscribe('some.topic', my_task_2)
+
+# Or subscribe with decoration
+@celery_pubsub.subscribe_to(topic="some.topic")
+@celery.task
+def my_task_1(*args, **kwargs):
+    return "task 1 done"
+
+# Or use only decoration 
+@celery_pubsub.subscribe_to(topic="some.topic")
+def my_task_1(*args, **kwargs):
+    return "task 1 done"
 
 # Now, let's publish something
 res = celery_pubsub.publish('some.topic', data='something', value=42)
@@ -80,6 +91,13 @@ celery_pubsub.subscribe('some.beep', my_task_5)
 # it's okay to have more than one task on the same topic
 celery_pubsub.subscribe('some.beep', my_task_6)
 
+# or subscribe directly with decorator
+@celery_pubsub.subscribe_to(topic="some.*")
+def my_task_1(*args, **kwargs): ...
+
+@celery_pubsub.subscribe_to(topic="some.*.test")
+def my_task_2(*args, **kwargs): ...
+
 # Let's publish
 celery_pubsub.publish('nowhere', 4)               # task 4 only
 celery_pubsub.publish('some', 8)                  # task 4 only
@@ -101,6 +119,7 @@ celery_pubsub.publish('some.very.good.test', 42)  # task 3 only
 ## Changelog
 
 * 2.0.0
+    * Add new decorator: subscribe_to 
     * Drop support for CPython 2.7, 3.4, 3.5, 3.6
     * Drop support for Pypy 2.7 and 3.6.
     * Drop support for Celery 3.
