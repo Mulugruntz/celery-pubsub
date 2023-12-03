@@ -16,13 +16,14 @@ else:
 
 from typing import Callable, TypeVar
 
-import celery
 import pytest
+
+import celery
 from celery import Task
 from celery.worker import WorkController
-from pkg_resources import get_distribution, parse_version
 
 from celery_pubsub import subscribe, subscribe_to
+from pkg_resources import get_distribution, parse_version
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -56,12 +57,12 @@ if not typing.TYPE_CHECKING:
 
 @pytest.fixture(scope="session")
 def job_a() -> Task[P, str]:
-    @subscribe_to(topic="index.high")
-    def job_a(*args: P.args, **kwargs: P.kwargs) -> str:
+    @task(name="job_a")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_a: {} {}".format(args, kwargs))
         return "a"
 
-    return job_a
+    return job
 
 
 @pytest.fixture(scope="session")
@@ -76,12 +77,12 @@ def job_b() -> Task[P, str]:
 
 @pytest.fixture(scope="session")
 def job_c() -> Task[P, str]:
-    @subscribe_to(topic="index")
-    def job_c(*args: P.args, **kwargs: P.kwargs) -> str:
+    @task(name="job_c")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
         print("job_c: {} {}".format(args, kwargs))
         return "c"
 
-    return job_c
+    return job
 
 
 @pytest.fixture(scope="session")
@@ -124,6 +125,48 @@ def job_g() -> Task[P, str]:
     return job
 
 
+@pytest.fixture(scope="session")
+def job_h() -> Task[P, str]:
+    @subscribe_to(topic="foo.#")
+    @task(bind=True, name="job_h")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_h: {args} {kwargs}")
+        return "h"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_i() -> Task[P, str]:
+    @subscribe_to(topic="foo")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_i: {args} {kwargs}")
+        return "i"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_l() -> Task[P, str]:
+    @subscribe_to(topic="foo.bar.baz")
+    @task(name="job_l")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_l: {args} {kwargs}")
+        return "l"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_m() -> Task[P, str]:
+    @subscribe_to(topic="foo.bar")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_m: {args} {kwargs}")
+        return "m"
+
+    return job
+
+
 @pytest.fixture(scope="session", autouse=True)
 def subscriber(
     job_a: Task[P, str],
@@ -133,8 +176,14 @@ def subscriber(
     job_e: Task[P, str],
     job_f: Task[P, str],
     job_g: Task[P, str],
+        job_h: Task[P, str],
+        job_i: Task[P, str],
+        job_l: Task[P, str],
+        job_m: Task[P, str],
 ) -> None:
+    subscribe("index.high", job_a)
     subscribe("index.low", job_b)
+    subscribe("index", job_c)
     subscribe("index.#", job_d)
     subscribe("#", job_e)
     subscribe("index.*.test", job_f)

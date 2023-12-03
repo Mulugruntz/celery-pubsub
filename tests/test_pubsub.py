@@ -80,6 +80,34 @@ def test_7(celery_worker: WorkController) -> None:
     assert sorted(res) == sorted(["d", "e", "f", "g"])
 
 
+def test_8(celery_worker: WorkController) -> None:
+    from celery_pubsub import publish
+
+    res = publish("foo", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e", "i"])
+
+
+def test_9(celery_worker: WorkController) -> None:
+    from celery_pubsub import publish
+
+    res = publish("foo.bar.blur", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e", "h"])
+
+
+def test_10(celery_worker: WorkController) -> None:
+    from celery_pubsub import publish
+
+    res = publish("foo.bar.baz", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e", "h", "l"])
+
+
+def test_11(celery_worker: WorkController) -> None:
+    from celery_pubsub import publish
+
+    res = publish("foo.bar", 4, 8, a15=16, a23=42).get()
+    assert sorted(res) == sorted(["e", "h", "m"])
+
+
 def test_subscription_redundant(
     job_a: Task[P, str], celery_worker: WorkController
 ) -> None:
