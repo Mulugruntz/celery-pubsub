@@ -110,6 +110,9 @@ jobs:
         pip install "celery${{ matrix.celery }}"
         pip install pytest-github-actions-annotate-failures
 
+    - name: Check with black
+      run: black --check .
+
     - name: Check with mypy
       if: ${{ !startsWith(matrix.python-version, 'pypy') && matrix.python-version >= '3.7' }}
       run: mypy
