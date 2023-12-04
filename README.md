@@ -1,4 +1,4 @@
-# celery-pubsub 2.0.0-beta4
+# celery-pubsub 2.0.0-beta3
 
 
 [![Build and Test](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml/badge.svg)](https://github.com/Mulugruntz/celery-pubsub/actions/workflows/build.yml)
