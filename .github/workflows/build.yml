@@ -138,7 +138,9 @@ jobs:
     - name: Code Climate Coverage Action
       uses: paambaati/codeclimate-action@v3.2.0
       env:
-        CC_TEST_REPORTER_ID: ${{ vars.CC_TEST_REPORTER_ID }}
+        # According to CodeClimate documentation, this is not considered a sensitive value.
+        # https://docs.codeclimate.com/docs/finding-your-test-coverage-token#regenerating-a-repos-test-reporter-id
+        CC_TEST_REPORTER_ID: 4967416d540739937e0eebfb13a3cf2f8dfbddd762f2b1ec800e83d18fb5efbb
       with:
         coverageCommand: coverage xml
         debug: true
