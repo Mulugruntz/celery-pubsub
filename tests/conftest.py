@@ -22,7 +22,28 @@ import celery
 from celery import Task
 
 from celery_pubsub import subscribe, subscribe_to
-from pkg_resources import get_distribution, parse_version
+from packaging.version import parse, Version
+
+
+# TODO: Simplify this when we drop support for Python 3.7.
+if typing.TYPE_CHECKING:
+
+    def get_distribution_version(distribution_name: str) -> Version:
+        ...
+
+else:
+
+    def get_distribution_version(distribution_name: str) -> Version:
+        try:
+            from importlib.metadata import distribution
+
+            return parse(distribution(distribution_name).version)
+        except ImportError:
+            # Fallback for Python < 3.8. Remove when we drop support for Python 3.7.
+            from pkg_resources import get_distribution
+
+            return parse(get_distribution(distribution_name).version)
+
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -39,7 +60,7 @@ if not typing.TYPE_CHECKING:
             "broker_transport_options": {"polling_interval": 0.05},
         }
 
-    if get_distribution("celery").parsed_version >= parse_version("5.0.0"):
+    if get_distribution_version("celery") >= parse("5.0.0"):
         pytest_plugins = ["celery.contrib.pytest"]
 
 
