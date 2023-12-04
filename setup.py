@@ -34,7 +34,7 @@ def tests_require():
 setuptools.setup(
     name="celery-pubsub",
     packages=["celery_pubsub"],
-    version="2.0.0-beta3",
+    version="2.0.0-beta4",
     description="A Publish and Subscribe library for Celery",
     long_description=long_description(),
     long_description_content_type="text/markdown",
