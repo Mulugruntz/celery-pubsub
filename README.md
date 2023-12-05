@@ -29,12 +29,12 @@ Publish and Subscribe with Celery
 import celery
 import celery_pubsub
 
-@celery.task
+@celery.shared_task
 def my_task_1(*args, **kwargs):
     return "task 1 done"
 
 
-@celery.task
+@celery.shared_task
 def my_task_2(*args, **kwargs):
     return "task 2 done"
 
@@ -43,16 +43,16 @@ def my_task_2(*args, **kwargs):
 celery_pubsub.subscribe('some.topic', my_task_1)
 celery_pubsub.subscribe('some.topic', my_task_2)
 
-# Or subscribe with decoration
+# Or subscribe with decorator + task decorator
 @celery_pubsub.subscribe_to(topic="some.topic")
-@celery.task
-def my_task_1(*args, **kwargs):
-    return "task 1 done"
+@celery.shared_task
+def my_task_3(*args, **kwargs):
+    return "task 3 done"
 
-# Or use only decoration 
+# Or use only `subscribe_to` decorator
 @celery_pubsub.subscribe_to(topic="some.topic")
-def my_task_1(*args, **kwargs):
-    return "task 1 done"
+def my_task_4(*args, **kwargs):
+    return "task 4 done"
 
 # Now, let's publish something
 res = celery_pubsub.publish('some.topic', data='something', value=42)
@@ -70,17 +70,17 @@ res = celery_pubsub.publish('nowhere', data='something else', value=23)
 Wildcards can be used in topic names:
 
 * ``*`` matches any one group
-   * ``some.*.test`` will match ``some.awesome.test``, ``some.random.test``
-     but not ``some.pretty.cool.test``, ``elsewhere`` or ``here.some.up.test``
-   * ``some.*`` will match ``some.test`` and ``some.thing`` but it won't
-     match ``some`` or ``some.testy.test``
+    * ``some.*.test`` will match ``some.awesome.test``, ``some.random.test``
+      but not ``some.pretty.cool.test``, ``elsewhere`` or ``here.some.up.test``
+    * ``some.*`` will match ``some.test`` and ``some.thing`` but it won't
+      match ``some`` or ``some.testy.test``
 
 * ``#`` matches any number of groups
-   * ``some.#.test`` will match ``some.awesome.test``, ``some.random.test``,
-     ``some.pretty.cool.test`` but not ``elsewhere`` or ``here.some.up.test``
-   * ``some.#`` will match anything that starts with ``some.``, such as
-     ``some.very.specific.topic.indeed``
-   * ``#`` will match anything
+    * ``some.#.test`` will match ``some.awesome.test``, ``some.random.test``,
+      ``some.pretty.cool.test`` but not ``elsewhere`` or ``here.some.up.test``
+    * ``some.#`` will match anything that starts with ``some.``, such as
+      ``some.very.specific.topic.indeed``
+    * ``#`` will match anything
 
 ```python
 # Let's subscribe
@@ -94,17 +94,17 @@ celery_pubsub.subscribe('some.beep', my_task_6)
 
 # or subscribe directly with decorator
 @celery_pubsub.subscribe_to(topic="some.*")
-def my_task_1(*args, **kwargs): ...
+def my_task_7(*args, **kwargs): ...
 
 @celery_pubsub.subscribe_to(topic="some.*.test")
-def my_task_2(*args, **kwargs): ...
+def my_task_8(*args, **kwargs): ...
 
 # Let's publish
 celery_pubsub.publish('nowhere', 4)               # task 4 only
 celery_pubsub.publish('some', 8)                  # task 4 only
-celery_pubsub.publish('some.thing', 15)           # tasks 1, 3 and 4
-celery_pubsub.publish('some.true.test', 16)       # tasks 2, 3 and 4
-celery_pubsub.publish('some.beep', 23)            # tasks 1, 3, 4, 5 and 6
+celery_pubsub.publish('some.thing', 15)           # tasks 1, 3, 4 and 7
+celery_pubsub.publish('some.true.test', 16)       # tasks 2, 3, 4 and 8
+celery_pubsub.publish('some.beep', 23)            # tasks 1, 3, 4, 5, 6 and 7
 celery_pubsub.publish('some.very.good.test', 42)  # tasks 3 and 4
 
 # And if you want to publish synchronously:
