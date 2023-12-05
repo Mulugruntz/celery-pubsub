@@ -43,6 +43,17 @@ def my_task_2(*args, **kwargs):
 celery_pubsub.subscribe('some.topic', my_task_1)
 celery_pubsub.subscribe('some.topic', my_task_2)
 
+# Or subscribe with decoration
+@celery_pubsub.subscribe_to(topic="some.topic")
+@celery.task
+def my_task_1(*args, **kwargs):
+    return "task 1 done"
+
+# Or use only decoration 
+@celery_pubsub.subscribe_to(topic="some.topic")
+def my_task_1(*args, **kwargs):
+    return "task 1 done"
+
 # Now, let's publish something
 res = celery_pubsub.publish('some.topic', data='something', value=42)
 
@@ -81,6 +92,13 @@ celery_pubsub.subscribe('some.beep', my_task_5)
 # it's okay to have more than one task on the same topic
 celery_pubsub.subscribe('some.beep', my_task_6)
 
+# or subscribe directly with decorator
+@celery_pubsub.subscribe_to(topic="some.*")
+def my_task_1(*args, **kwargs): ...
+
+@celery_pubsub.subscribe_to(topic="some.*.test")
+def my_task_2(*args, **kwargs): ...
+
 # Let's publish
 celery_pubsub.publish('nowhere', 4)               # task 4 only
 celery_pubsub.publish('some', 8)                  # task 4 only
@@ -102,6 +120,7 @@ celery_pubsub.publish('some.very.good.test', 42)  # task 3 only
 ## Changelog
 
 * 2.0.0
+    * Add new decorator: subscribe_to 
     * Drop support for CPython 2.7, 3.4, 3.5, 3.6
     * Drop support for Pypy 2.7 and 3.6.
     * Drop support for Celery 3.

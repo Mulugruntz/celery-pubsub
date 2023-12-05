@@ -21,7 +21,7 @@ import pytest
 import celery
 from celery import Task
 
-from celery_pubsub import subscribe
+from celery_pubsub import subscribe, subscribe_to
 from packaging.version import parse, Version
 
 
@@ -134,6 +134,48 @@ def job_g() -> Task[P, str]:
     return job
 
 
+@pytest.fixture(scope="session")
+def job_h() -> Task[P, str]:
+    @subscribe_to(topic="foo.#")
+    @task(bind=True, name="job_h")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_h: {args} {kwargs}")
+        return "h"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_i() -> Task[P, str]:
+    @subscribe_to(topic="foo")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_i: {args} {kwargs}")
+        return "i"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_j() -> Task[P, str]:
+    @subscribe_to(topic="foo.bar.baz")
+    @task(name="job_j")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_j: {args} {kwargs}")
+        return "j"
+
+    return job
+
+
+@pytest.fixture(scope="session")
+def job_k() -> Task[P, str]:
+    @subscribe_to(topic="foo.bar")
+    def job(*args: P.args, **kwargs: P.kwargs) -> str:
+        print(f"job_k: {args} {kwargs}")
+        return "k"
+
+    return job
+
+
 @pytest.fixture(scope="session", autouse=True)
 def subscriber(
     job_a: Task[P, str],
@@ -143,6 +185,10 @@ def subscriber(
     job_e: Task[P, str],
     job_f: Task[P, str],
     job_g: Task[P, str],
+    job_h: Task[P, str],
+    job_i: Task[P, str],
+    job_j: Task[P, str],
+    job_k: Task[P, str],
 ) -> None:
     subscribe("index.high", job_a)
     subscribe("index.low", job_b)

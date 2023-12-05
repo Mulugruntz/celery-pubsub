@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import typing
 
 if typing.TYPE_CHECKING:  # pragma: no cover
@@ -16,23 +17,25 @@ else:
             TypeAlias = None
 
 import celery
-import re
 
 __all__ = [
     "publish",
     "publish_now",
     "subscribe",
+    "subscribe_to",
     "unsubscribe",
 ]
-
 from celery import Task, group
 from celery.result import AsyncResult, EagerResult
-
 
 PA: TypeAlias = typing.Any  # ParamSpec args
 PK: TypeAlias = typing.Any  # ParamSpec kwargs
 P: TypeAlias = typing.Any  # ParamSpec
 R: TypeAlias = typing.Any  # Return type
+
+task: typing.Callable[
+    ..., typing.Callable[[typing.Callable[[P], R]], Task[P, R]]
+] = celery.shared_task
 
 
 class PubSubManager:
@@ -82,6 +85,20 @@ class PubSubManager:
 
 
 _pubsub_manager: PubSubManager = PubSubManager()
+
+
+def subscribe_to(topic: str) -> typing.Callable[[typing.Callable[[P], R]], Task[P, R]]:
+    def decorator(func: typing.Callable[[P], R]) -> Task[P, R]:
+        if isinstance(func, Task):
+            task_instance: Task[P, R] = func
+        else:
+            app_name, module_name = func.__module__.split(".", 1)
+            task_name = f"{app_name}.{module_name}.{func.__qualname__}"
+            task_instance = task(name=task_name)(func)
+        _pubsub_manager.subscribe(topic, task_instance)
+        return task_instance
+
+    return decorator
 
 
 def publish(topic: str, *args: PA, **kwargs: PK) -> AsyncResult[R]:
