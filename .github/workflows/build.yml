@@ -119,7 +119,7 @@ jobs:
       run: black --check .
 
     - name: Check with mypy
-      if: ${{ !startsWith(matrix.python-version, 'pypy') && matrix.python-version >= '3.7' }}
+      if: ${{ !startsWith(matrix.python-version, 'pypy') }}
       run: mypy
 
     - name: Lint with flake8

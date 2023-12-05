@@ -19,7 +19,6 @@ from celery.worker import WorkController
 from celery_pubsub import publish, unsubscribe, publish_now
 
 P = ParamSpec("P")
-R = typing.TypeVar("R")
 
 
 def test_subscription(job_c: Task[P, str], celery_worker: WorkController) -> None:
