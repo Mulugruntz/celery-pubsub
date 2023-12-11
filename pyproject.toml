@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "celery-pubsub"
-version = "2.0.0-beta3"
+version = "2.0.0-beta4"
 description = "A Publish and Subscribe library for Celery"
+authors = ["Samuel Giffard <samuel@giffard.co>"]
 license = "MIT"
-authors = ["Samuel GIFFARD <mulugruntz@gmail.com>"]
 readme = "README.md"
 homepage = "https://github.com/Mulugruntz/celery-pubsub"
 repository = "https://github.com/Mulugruntz/celery-pubsub"
@@ -17,17 +17,48 @@ classifiers = [
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries",
         "Topic :: System :: Distributed Computing",
         "Topic :: Utilities",
     ]
+packages = [
+    {include = "celery_pubsub"},
+]
+include = [
+    { path = "LICENSE", format = "sdist" },
+]
+
+[tool.poetry.urls]
+"Download" = "https://github.com/Mulugruntz/celery-pubsub/tarball/2.0.0-beta4"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
-celery = ">=4.0.0"
+python = ">=3.7,<3.13"
+celery = {version = ">=4.0,<6.0"}
+# In python 3.12, we have to use kombu 5.3.5 or higher.
+# This is not ideal, as it's celery's own dependency.
+# https://github.com/celery/kombu/pull/1509
+kombu = [
+        {version = ">=4.0,<6.0", python = ">=3.7,<3.12"},
+        {version = "^5.3.0", python = ">=3.12"}
+]
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+coverage = "5.5"
+black = "23.3.0"
+flake8 = ">=5.0.0"
+typing-extensions = "4.7.1"
+# Only for CPython (exclude pypy).
+celery-types = {version = "0.14.0", markers = "implementation_name != 'pypy'"}
+mypy = {version = "1.0.0", markers = "implementation_name != 'pypy'"}
+types-setuptools = {version = "67.6.0.6", markers = "implementation_name != 'pypy'"}
+
+
+[tool.poetry.group.ci.dependencies]
+pytest-github-actions-annotate-failures = "^0.2.0"
 
 [build-system]
 requires = ["poetry-core"]
