@@ -19,7 +19,7 @@ from typing import Callable, TypeVar
 import pytest
 
 import celery
-from celery import Task
+from celery.app.task import Task
 
 from celery_pubsub import subscribe, subscribe_to
 from packaging.version import parse, Version
