@@ -6,4 +6,4 @@ typing-extensions==4.7.1
 # Only for CPython (exclude pypy).
 celery-types==0.14.0; implementation_name != 'pypy'
 mypy==1.0.0; implementation_name != 'pypy'
-types-setuptools==67.6.0.6; implementation_name != 'pypy'
+types-setuptools==69.5.0.20240423; implementation_name != 'pypy'
