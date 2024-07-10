@@ -7,3 +7,4 @@ typing-extensions==4.7.1
 celery-types==0.14.0; implementation_name != 'pypy'
 mypy==1.0.0; implementation_name != 'pypy'
 types-setuptools==67.6.0.6; implementation_name != 'pypy'
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
