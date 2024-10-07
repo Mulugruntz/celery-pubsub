@@ -1,6 +1,6 @@
 pytest
 coverage==5.5
-black==23.3.0
+black==24.10.0
 typing-extensions==4.7.1
 
 # Only for CPython (exclude pypy).
